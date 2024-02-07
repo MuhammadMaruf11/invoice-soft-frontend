@@ -1,0 +1,168 @@
+.invoice-container {
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.invoice-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.logo-container img {
+  max-width: 200px;
+  height: auto;
+}
+
+.customer-info,
+.customer-details {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.info-item,
+.details-item {
+  margin-bottom: 10px;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.table th {
+  background-color: #f2f2f2;
+}
+
+.sl-no {
+  width: 5%;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.loader {
+  border: 6px solid #f3f3f3; /* Light grey */
+  border-top: 6px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.invoice-container {
+  font-family: sans-serif;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.invoice-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.logo-container {
+  width: 200px;
+}
+
+.company-address ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.company-address li {
+  margin-bottom: 5px;
+}
+
+.customer-info,
+.customer-details {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.info-item,
+.details-item {
+  width: 45%;
+}
+
+.invoice-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+.table {
+  border: 1px solid #ddd;
+  width: 100%;
+}
+
+.table th,
+.table td {
+  padding: 8px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.table th {
+  font-weight: bold;
+}
+
+.sl-no {
+  width: 50px;
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+/* Additional styles */
+
+.customer-name,
+.date,
+.address,
+.phone {
+  font-weight: bold;
+}
+
+.amount {
+  text-align: right;
+}
