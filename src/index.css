@@ -1,7 +1,9 @@
 .invoice-container {
-  padding: 20px;
-  border: 1px solid #ccc;
+  max-width: 1440px;
   border-radius: 5px;
+  font-family: sans-serif;
+  margin: 0 auto;
+  padding: 20px;
 }
 
 .invoice-header {
@@ -81,11 +83,6 @@
   }
 }
 
-.invoice-container {
-  font-family: sans-serif;
-  margin: 0 auto;
-  padding: 20px;
-}
 
 .invoice-header {
   display: flex;

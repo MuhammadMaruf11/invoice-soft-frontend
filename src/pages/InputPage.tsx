@@ -20,11 +20,11 @@ const InputPage: FC<UpdatedItem> = () => {
         customerName: '',
         customerAddress: '',
         customerPhone: '',
-        date: '',
+        date: currentDate,
         items: [{
             description: '',
             quantity: 1,
-            price: 0,
+            price: '',
             amount: 0,
         }],
         total: 0,
@@ -116,7 +116,7 @@ const InputPage: FC<UpdatedItem> = () => {
             items: [...prevData.items, {
                 description: '',
                 quantity: 1,
-                price: 0,
+                price: '',
                 amount: 0,
             }],
         }));
@@ -148,6 +148,22 @@ const InputPage: FC<UpdatedItem> = () => {
         try {
             // Here, you can use Axios or any other library to make an HTTP request
             await API.post('/invoice', customerData);
+            setCustomerData({
+                customerName: '',
+                customerAddress: '',
+                customerPhone: '',
+                date: currentDate,
+                items: [{
+                    description: '',
+                    quantity: 1,
+                    price: '',
+                    amount: 0,
+                }],
+                total: 0,
+                prepaid: 0,
+                balance: 0,
+                delivery: ''
+            })
             setTimeout(() => {
                 navigate("/preview");
             }, 1500);
@@ -244,13 +260,36 @@ const InputPage: FC<UpdatedItem> = () => {
                                 {customerData?.items?.map((item, index: number) => {
                                     return (
                                         <tr key={index}>
-                                            <td className="sl-no-style">{index + 1}</td>
-                                            <td><input type="text" value={item.description} onChange={(e) => handleItemChange(index, 'description', e.target.value)} /></td>
-                                            <td><input type="number" value={item.quantity} onChange={(e) => handleItemChange(index, 'quantity', parseInt(e.target.value))} /></td>
-                                            <td><input type="number" value={item.price} onChange={(e) => handleItemChange(index, 'price', parseFloat(e.target.value))} /></td>
-                                            <td><input type="number" value={item.amount} readOnly /></td>
+                                            <td className="sl-no-style">
+                                                {index + 1}
+                                            </td>
                                             <td>
-
+                                                <input type="text"
+                                                    value={item.description}
+                                                    onChange={(e) => handleItemChange(index, 'description', e.target.value)}
+                                                />
+                                            </td>
+                                            <td>
+                                                <input style={{ textAlign: 'end' }}
+                                                    type="number"
+                                                    value={item.quantity}
+                                                    onChange={(e) => handleItemChange(index, 'quantity', parseInt(e.target.value))}
+                                                />
+                                            </td>
+                                            <td>
+                                                <input style={{ textAlign: 'end' }}
+                                                    type="number"
+                                                    value={item.price}
+                                                    onChange={(e) => handleItemChange(index, 'price', parseFloat(e.target.value))}
+                                                />
+                                            </td>
+                                            <td>
+                                                <input style={{ textAlign: 'end' }}
+                                                    type="number"
+                                                    value={item.amount}
+                                                    readOnly />
+                                            </td>
+                                            <td>
                                                 <button type="button" className='btn-add' onClick={handleAddItem}>Add </button>
                                                 {index > 0 && (<button type="button" className='btn-dlt' onClick={() => handleRemoveItem(index)}>Dlt</button>)}
                                             </td>
@@ -261,7 +300,9 @@ const InputPage: FC<UpdatedItem> = () => {
                                     <td colSpan={2}></td>
                                     <td><strong>Total :</strong></td>
                                     <td colSpan={2} className="text-right">
-                                        <input type="number" name="total"
+                                        <input style={{ textAlign: 'end' }}
+                                            type="number"
+                                            name="total"
                                             value={customerData.total}
                                             readOnly
                                         />
@@ -272,7 +313,8 @@ const InputPage: FC<UpdatedItem> = () => {
                                     <td colSpan={2}></td>
                                     <td><strong>Prepaid :</strong></td>
                                     <td colSpan={2} className="text-right">
-                                        <input type="number"
+                                        <input style={{ textAlign: 'end' }}
+                                            type="number"
                                             name="prepaid"
                                             value={customerData.prepaid}
                                             onChange={handleChangeAmount}
@@ -283,7 +325,8 @@ const InputPage: FC<UpdatedItem> = () => {
                                     <td colSpan={2}></td>
                                     <td><strong>Balance :</strong></td>
                                     <td colSpan={2} className="text-right">
-                                        <input type="number"
+                                        <input style={{ textAlign: 'end' }}
+                                            type="number"
                                             name="balance"
                                             value={customerData.balance}
                                             readOnly

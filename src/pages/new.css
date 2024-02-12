@@ -71,6 +71,8 @@ button[type="submit"]:hover {
 }
 
 .input-page-area {
-  width: 80%;
+  max-width: 1440px;
   margin: 50px auto;
+  border: 1px solid skyblue;
+  padding: 20px;
 }
