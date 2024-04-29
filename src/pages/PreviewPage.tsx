@@ -1,15 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import API from '../helper/api';
 import { jsPDF } from "jspdf";
 import companyLogo from '/company-logo.png'
+import 'react-quill/dist/quill.snow.css';
 
 interface Invoice {
     customerName: string;
     date: string;
     customerAddress: string;
     customerPhone: string;
+    invoiceDetails: string;
     items: Item[];
-    // Add other properties as needed
 }
 
 interface Item {
@@ -17,12 +18,13 @@ interface Item {
     quantity: number;
     price: number;
     amount: number;
-    // Add other properties as needed
 }
 
 const PreviewPage = () => {
     const [invoices, setInvoices] = useState<Invoice[]>([]);
     const [isLoading, setLoading] = useState<boolean>(false);
+
+    const invoiceDetailsRef = useRef<HTMLParagraphElement>(null);
 
     useEffect(() => {
         setLoading(true);
@@ -35,13 +37,18 @@ const PreviewPage = () => {
             } catch (error) {
                 console.error(error);
                 setLoading(false);
-                // handle error here, e.g., display an error message to the user
             }
         };
-
         fetchInvoices();
     }, []);
 
+    useEffect(() => {
+        if (invoices && invoiceDetailsRef.current) {
+            console.log('object', invoiceDetailsRef.current);
+            // Set the inner HTML of the paragraph using ref
+            invoiceDetailsRef.current.innerHTML = invoices?.invoiceDetails;
+        }
+    }, [invoices]);
 
     const exportPDF = () => {
         // Landscape export, 2×4 inches
@@ -120,6 +127,15 @@ const PreviewPage = () => {
                                 </p>
                             </div>
                         </div>
+                        <div className="customer-details">
+                            <div className="details-item">
+                                <p>
+                                    <strong>Invoice Details :</strong>
+                                </p>
+                                <p className="ql-editor" ref={invoiceDetailsRef}>
+                                </p>
+                            </div>
+                        </div>
                         <div className="invoice-table">
                             <div className="table-wrap">
                                 <table className="table">
@@ -141,8 +157,8 @@ const PreviewPage = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {Array.from({ length: Math.max(18, invoices?.items?.length || 0) }).map((_, index: number) => {
-                                                const item = invoices?.items?.[index];
+                                        {invoices?.items?.map((_, index: number) => {
+                                            const item = invoices?.items?.[index];
                                             return (
                                                 <tr key={index}>
                                                     <td className="sl-no-style">{index + 1}</td>
@@ -154,22 +170,22 @@ const PreviewPage = () => {
                                             )
                                         })}
                                         <tr>
-                                            <td colSpan={2}></td>
+                                            <td colSpan={3}></td>
                                             <td><strong>Total :</strong></td>
                                             <td colSpan={2} className="text-right"><strong><u>{invoices?.total}</u></strong></td>
                                         </tr>
                                         <tr>
-                                            <td colSpan={2}></td>
+                                            <td colSpan={3}></td>
                                             <td><strong>Prepaid :</strong></td>
                                             <td colSpan={2} className="text-right"><strong>{invoices?.prepaid}</strong></td>
                                         </tr>
                                         <tr>
-                                            <td colSpan={2}></td>
+                                            <td colSpan={3}></td>
                                             <td><strong>Balance :</strong></td>
                                             <td colSpan={2} className="text-right"> <strong>  {invoices?.balance}</strong></td>
                                         </tr>
                                         <tr>
-                                            <td colSpan={2}></td>
+                                            <td colSpan={3}></td>
                                             <td><strong>Delivery :</strong></td>
                                             <td colSpan={3} className="text-right" style={{ color: '#00d100' }}>  <strong> {invoices?.delivery}</strong></td>
                                         </tr>

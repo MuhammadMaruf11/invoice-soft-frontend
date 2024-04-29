@@ -76,3 +76,8 @@ button[type="submit"]:hover {
   border: 1px solid skyblue;
   padding: 20px;
 }
+
+.editor-input{
+  height: 300px;
+  margin-bottom: 60px;
+}

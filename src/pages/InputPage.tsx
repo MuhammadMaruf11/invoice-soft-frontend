@@ -3,12 +3,16 @@ import API from '../helper/api';
 import { useNavigate } from "react-router-dom";
 import './new.css'
 
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+
 interface UpdatedItem {
     description: '';
     quantity: 1;
     price: 0;
     amount: 0;
 }
+
 
 const InputPage: FC<UpdatedItem> = () => {
 
@@ -21,6 +25,7 @@ const InputPage: FC<UpdatedItem> = () => {
         customerAddress: '',
         customerPhone: '',
         date: currentDate,
+        invoiceDetails: '',
         items: [{
             description: '',
             quantity: 1,
@@ -33,6 +38,23 @@ const InputPage: FC<UpdatedItem> = () => {
         delivery: ''
     });
 
+    const modules = {
+        toolbar: [
+            [{ header: [1, 2, 3, 4, 5, 6, false] }],
+            [{ font: [] }],
+            [{ size: [] }],
+            ["bold", "italic", "underline", "strike", "blockquote"],
+            [
+                { list: "ordered" },
+                { list: "bullet" },
+                { indent: "-1" },
+                { indent: "+1" },
+            ],
+            ["link"],
+            // ["link", "image", "video"],
+        ],
+    };
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setCustomerData(prevData => ({
@@ -41,7 +63,12 @@ const InputPage: FC<UpdatedItem> = () => {
         }));
     };
 
-
+    const handleModelChange = (event) => {
+        setCustomerData(prevData => ({
+            ...prevData,
+            invoiceDetails: event
+        }));
+    }
 
     const handleItemChange = (index: number, field: string, value: string | number) => {
         setCustomerData(prevData => {
@@ -108,8 +135,6 @@ const InputPage: FC<UpdatedItem> = () => {
         });
     };
 
-
-
     const handleAddItem = () => {
         setCustomerData(prevData => ({
             ...prevData,
@@ -152,6 +177,7 @@ const InputPage: FC<UpdatedItem> = () => {
                 customerName: '',
                 customerAddress: '',
                 customerPhone: '',
+                invoiceDetails: '',
                 date: currentDate,
                 items: [{
                     description: '',
@@ -172,12 +198,11 @@ const InputPage: FC<UpdatedItem> = () => {
         }
     };
 
-
+    console.log('customerData', customerData);
 
     return (
         <div className='input-page-area'>
             <form onSubmit={handleSubmit}>
-
                 <div className="customer-info">
                     <div className="info-item">
                         <label htmlFor="customerName">
@@ -233,6 +258,15 @@ const InputPage: FC<UpdatedItem> = () => {
 
                     </div>
                 </div>
+                <div className="invoice-details">
+                    <div className="">
+                        <label htmlFor="invoiceDetails">
+                            Invoice Details
+                        </label>
+                        <ReactQuill className='editor-input' placeholder={"Write something..."} theme="snow" value={customerData.invoiceDetails} onChange={handleModelChange} modules={modules} />
+                    </div>
+                </div>
+                <br />
                 <div className="invoice-table">
                     <div className="table-wrap">
                         <table className="table">
@@ -343,7 +377,6 @@ const InputPage: FC<UpdatedItem> = () => {
                                             onChange={handleChange}
                                         />
                                     </td>
-
                                 </tr>
                             </tbody>
                         </table>
