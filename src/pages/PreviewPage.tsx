@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
-import API from '../helper/api';
+
 import { jsPDF } from "jspdf";
 import companyLogo from '/company-logo.png'
 import 'react-quill/dist/quill.snow.css';
+import { PrivateAPI } from '../helper/api';
 
 interface Invoice {
     customerName: string;
@@ -30,7 +31,7 @@ const PreviewPage = () => {
         setLoading(true);
         const fetchInvoices = async () => {
             try {
-                const response = await API.get('/getInvoice'); // adjust URL based on your backend setup
+                const response = await PrivateAPI.get('/getInvoice'); // adjust URL based on your backend setup
                 const data = response.data[response.data.length - 1]
                 setInvoices(data);
                 setLoading(false);

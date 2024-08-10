@@ -1,0 +1,216 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Nunito:wght@400;600;700&display=swap");
+
+/* Global Styles */
+* {
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #333;
+  background: #fff;
+}
+
+html,
+body {
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 14px;
+  background: #fff;
+  color: #000;
+}
+
+.container {
+  margin: 0 auto;
+  max-width: 1190px;
+  width: auto;
+}
+/* Navbar Styles */
+
+.admin-layout {
+  position: relative;
+}
+
+.admin-layout .navbar {
+  position: fixed;
+  width: 100%;
+}
+
+.navbar {
+  background-color: #333;
+  color: #fff;
+}
+
+.navbar .logo-wrap {
+  width: 250px;
+}
+
+.navbar .logo-wrap a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar .logo-wrap a img {
+  width: 34px;
+  margin-right: 6px;
+}
+
+.navbar .logo-wrap a span {
+  font-size: 24px;
+  color: #22a9e1;
+  font-weight: 600;
+}
+
+.navbar .btn {
+  margin: 0 5px;
+}
+
+/* Sidebar Styles */
+
+.navbar .logowrap a span {
+  font-size: 24px;
+  color: #22a9e1;
+  font-weight: 600;
+}
+
+.sidebar {
+  margin-top: 48px;
+  position: fixed;
+  top: 0;
+  left: -250px;
+  width: 250px;
+  height: 100%;
+  background-color: #333;
+  transition: left 0.3s ease-in-out;
+}
+
+.sidebar.open {
+  left: 0;
+}
+
+.sidebar .nav-link {
+  color: #fff;
+  margin-bottom: 5px;
+  transition: all 0.3s linear;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  border-bottom: 1px solid #ddd;
+}
+
+.sidebar .nav-link i {
+  width: 17.5px;
+  text-align: right;
+}
+
+.sidebar .nav-link span {
+  flex: 1 0;
+}
+
+.sidebar .nav-link:hover {
+  background: #555;
+  color: #fff;
+}
+/* Content Styles */
+.content {
+  display: flex;
+  transition: all 0.3s linear;
+  padding: 40px 0;
+}
+
+.content.shrinked {
+  margin-left: 250px;
+}
+
+.main {
+  flex-grow: 1;
+  padding: 20px;
+}
+
+/* Footer Styles */
+.footer {
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  padding: 10px 0;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .sidebar {
+    left: -250px;
+  }
+
+  .sidebar.open {
+    left: 0;
+  }
+}
+
+/* admin login page css here  */
+
+.admin-login-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-image: radial-gradient(circle, #5293b3 25%, #3267b3 75%);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* Styling for Create Plan Page */
+h1 {
+  margin-bottom: 20px;
+}
+
+form {
+  /* max-width: 400px; */
+  margin: 0 auto;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  font-weight: bold;
+}
+
+input[type="text"],
+input[type="number"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button[type="submit"] {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 1px solid #007bff;
+}
+
+button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+/* Optional: Add more styles for responsiveness */
+@media (max-width: 768px) {
+  form {
+    padding: 0 20px;
+  }
+}

@@ -1,10 +1,11 @@
 import { FC, useState } from 'react';
-import API from '../helper/api';
+
 import { useNavigate } from "react-router-dom";
-import './new.css'
+import '../new.css'
 
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import { PrivateAPI } from '../helper/api';
 
 interface UpdatedItem {
     description: '';
@@ -172,7 +173,7 @@ const InputPage: FC<UpdatedItem> = () => {
         e.preventDefault();
         try {
             // Here, you can use Axios or any other library to make an HTTP request
-            await API.post('/invoice', customerData);
+            await PrivateAPI.post('/invoice', customerData);
             setCustomerData({
                 customerName: '',
                 customerAddress: '',
