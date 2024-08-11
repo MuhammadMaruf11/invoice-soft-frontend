@@ -2,8 +2,8 @@
 
 import { Link } from "react-router-dom";
 import { useUserAuth } from "../../hooks/useUserAuth ";
-import { AiOutlineUser } from "react-icons/ai";
-import { AiOutlineLogin } from "react-icons/ai";
+import { FaUser } from "react-icons/fa";
+import { BiLogInCircle } from "react-icons/bi";
 
 const Header = () => {
 
@@ -39,9 +39,9 @@ const Header = () => {
               <div className="header-right">
                 <ul>
                   {isAuthenticated ? <li>
-                    <Link to='/user'><AiOutlineUser /> Profile</Link>
+                    <Link to='/user'><FaUser /> Profile</Link>
                   </li> : <li>
-                    <Link to='/user/login'><AiOutlineLogin /> Login</Link></li>}
+                    <Link to='/user/login'><BiLogInCircle /> Login</Link></li>}
                 </ul>
               </div>
             </div>

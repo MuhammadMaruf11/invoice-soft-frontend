@@ -1,6 +1,7 @@
 import { ReactNode } from 'react'
-import Header from '../Header/Header';
-import Footer from '../Footer/Footer';
+import Header from './Header';
+import Footer from './Footer';
+import Motion from './Motion';
 
 
 
@@ -13,7 +14,7 @@ const Layout = ({ children }: MainContent) => {
         <>
             <Header />
             <main>
-                {children}
+                <Motion> {children}</Motion>
             </main>
             <Footer />
         </>

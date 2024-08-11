@@ -77,7 +77,27 @@ button[type="submit"]:hover {
   padding: 20px;
 }
 
-.editor-input{
+.editor-input {
   height: 300px;
   margin-bottom: 60px;
 }
+
+/* user login css start */
+
+.login-area {
+  padding: 70px 0;
+}
+
+.login-form-wrap {
+  box-shadow: 0 0 2px 2px #00000020;
+  padding: 20px;
+}
+/* user login css end */
+
+/* user dashboard css start  */
+
+.user-dashboard-area {
+  padding: 70px 0;
+}
+
+/* user dashboard css end */

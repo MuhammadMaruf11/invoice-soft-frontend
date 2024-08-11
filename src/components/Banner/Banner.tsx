@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 
 
 const Banner = () => {
@@ -18,6 +19,10 @@ const Banner = () => {
                                 </strong>
                             </h1>
                             <p>Experience this service with a free one-time trial. After the trial, you can register to unlock unlimited access and take full advantage of this comprehensive features.</p>
+                        </div>
+                        <div className="banner-btn">
+                            <Link to='/docs' className="btn btn-info btn-lg text-white me-3">Get Started</Link>
+                            <Link to='/free-trial' className="btn btn-secondary btn-lg">Free Trial</Link>
                         </div>
                     </div>
                 </div>

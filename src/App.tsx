@@ -8,6 +8,8 @@ import AdminLogin from './pages/Admin/AdminLogin/AdminLogin';
 import AdminDashboard from './pages/Admin/AdminDashboard/AdminDashboard';
 import { useUserAuth } from './hooks/useUserAuth ';
 import { useAdminAuth } from './hooks/useAdminAuth ';
+import InputPage from './pages/Invoice/InputPage';
+import PreviewPage from './pages/Invoice/PreviewPage';
 
 function App() {
 
@@ -33,8 +35,8 @@ function App() {
         <Route path="/admin/login" element={!adminAuth ? <AdminLogin /> : <Navigate to="/admin" />} />
         <Route path="/admin" element={adminAuth ? <AdminDashboard /> : <Navigate to="/admin/login" />} />
 
-        {/*   <Route path="/user/invoice" element={<InputPage />} />
-        <Route path="/user/preview" element={<PreviewPage />} /> */}
+        <Route path="/free-trial" element={<InputPage />} />
+        <Route path="/invoice/preview" element={<PreviewPage />} />
       </Routes>
     </>
   )
