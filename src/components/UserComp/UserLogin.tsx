@@ -24,8 +24,8 @@ const UserLogin = () => {
         try {
             const response = await PublicAPI.post("/api/auth/login", formData)
             const data = response.data;
-            console.log('data', data);
             localStorage.setItem("userToken", data.token);
+            localStorage.setItem("userId", data.userId);
 
             toast.success("Sign-in Successfully", {
                 position: "top-center",

@@ -1,18 +1,27 @@
 import axios from "axios";
 import { redirect } from "react-router-dom";
 
-const accessToken = localStorage.getItem("token");
-
 export const PublicAPI = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
 });
 
 export const PrivateAPI = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
-  headers: {
-    Authorization: accessToken,
-  },
 });
+
+// Interceptor to dynamically add Authorization header
+PrivateAPI.interceptors.request.use(
+  (config) => {
+    const accessToken = localStorage.getItem("userToken");
+    if (accessToken) {
+      config.headers["Authorization"] = accessToken;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 PrivateAPI.interceptors.response.use(
   (response) => response,

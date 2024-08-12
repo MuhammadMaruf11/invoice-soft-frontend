@@ -33,7 +33,8 @@ const PreviewPage = () => {
         setLoading(true);
         const fetchInvoices = async () => {
             try {
-                const response = await PrivateAPI.get('/getInvoice'); // adjust URL based on your backend setup
+                const userId = localStorage.getItem('userId')
+                const response = await PrivateAPI.get('/invoice/' + userId); // adjust URL based on your backend setup
                 const data = response.data[response.data.length - 1]
                 setInvoices(data);
                 setLoading(false);

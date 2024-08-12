@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { PrivateAPI } from '../../helper/api';
+import { PrivateAPI, PublicAPI } from '../../helper/api';
 import Layout from '../../components/Layout/Layout';
 import CommonBanner from '../../components/Banner/CommonBanner';
 
@@ -20,16 +20,14 @@ const InputPage = () => {
     const navigate = useNavigate();
 
 
-    useEffect(() => {
-
-
-        if (userToken) {
-            localStorage.removeItem('onetimeaccess')
-        } else if (onetimeAccess && !userToken) {
-            // Redirect to the registration page if onetimeaccess is true
-            navigate('/user/register');
-        }
-    }, [navigate]);
+    // useEffect(() => {
+    //     if (userToken) {
+    //         localStorage.removeItem('onetimeaccess')
+    //     } else if (onetimeAccess && !userToken) {
+    //         // Redirect to the registration page if onetimeaccess is true
+    //         navigate('/user/register');
+    //     }
+    // }, [navigate]);
 
     const [customerData, setCustomerData] = useState({
         customerName: '',
@@ -183,19 +181,26 @@ const InputPage = () => {
         e.preventDefault();
         try {
             // Here, you can use Axios or any other library to make an HTTP request
-            await PrivateAPI.post('/invoice', customerData);
+            await PublicAPI.post('/free-trial', customerData);
+            // await PrivateAPI.post('/invoice', customerData);
 
-            if (!userToken) {
-                // If userToken is not found and user is not found, set one-time access
+            // if (!userToken) {
+            //     // If userToken is not found and user is not found, set one-time access
+            //     localStorage.setItem('onetimeaccess', 'true');
+            //     console.log('One-time access granted');
+            // } else if (userToken) {
+            //     // If userToken is found and user is found, remove one-time access if it exists
+            //     if (localStorage.getItem('onetimeaccess')) {
+            //         localStorage.removeItem('onetimeaccess');
+            //         console.log('One-time access removed');
+            //     }
+            // }
+
+            if (!onetimeAccess) {
                 localStorage.setItem('onetimeaccess', 'true');
                 console.log('One-time access granted');
-            } else if (userToken) {
-                // If userToken is found and user is found, remove one-time access if it exists
-                if (localStorage.getItem('onetimeaccess')) {
-                    localStorage.removeItem('onetimeaccess');
-                    console.log('One-time access removed');
-                }
             }
+
 
             setCustomerData({
                 customerName: '',
@@ -215,7 +220,7 @@ const InputPage = () => {
                 delivery: ''
             })
             setTimeout(() => {
-                navigate("/invoice/preview");
+                window.open("/invoice/preview", '_self');
             }, 1500);
         } catch (error) {
             console.error("error " + error);
@@ -227,7 +232,7 @@ const InputPage = () => {
     return (
         <Layout>
             <CommonBanner bannerTitle='Invoice Input Page' />
-            <section className='input-page-area'>
+            {!onetimeAccess ? <section className='input-page-area'>
                 <div className="container">
                     <div className="row">
                         <div className="col-12">
@@ -415,7 +420,36 @@ const InputPage = () => {
                         </div>
                     </div>
                 </div>
-            </section>
+            </section> : userToken && onetimeAccess ?
+                <section className='input-page-area'>
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-12 text-center">
+                                <h2 className='mb-4 text-danger'>Your one-time access has already been used!</h2>
+                                <p>To create unlimited invoices, please visit your <Link className='text-theme fw-bold' to='/user'>PROFILE</Link> and click the <u className='text-theme fw-bold'>'Unlimited Access'</u> button.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                : !userToken && onetimeAccess ? <section className='input-page-area'>
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-12 text-center">
+                                <h2 className='mb-4 text-danger'>Your one-time access has been used!</h2>
+                                <p>Please <Link className='text-theme fw-bold' to='/user/register'>REGISTER</Link> to unlock unlimited access.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                    : <section className='input-page-area'>
+                        <div className="container">
+                            <div className="row">
+                                <div className="col-12">
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+            }
         </Layout>
     );
 }
