@@ -27,9 +27,11 @@ const Header = () => {
                 <li>
                   <Link to='/docs'>Documentation</Link>
                 </li>
-                <li>
+                {isAuthenticated ? <li>
+                  <Link to='/unlimited-invoice'>Unlimited Invoice</Link>
+                </li> : <li>
                   <Link to='/free-trial'>Free Trial</Link>
-                </li>
+                </li>}
                 <li>
                   <Link to='/contact'>Contact</Link>
                 </li>
@@ -41,7 +43,8 @@ const Header = () => {
                   {isAuthenticated ? <li>
                     <Link to='/user'><FaUser /> Profile</Link>
                   </li> : <li>
-                    <Link to='/user/login'><BiLogInCircle /> Login</Link></li>}
+                    <Link to='/user/login'><BiLogInCircle /> Login</Link>
+                  </li>}
                 </ul>
               </div>
             </div>

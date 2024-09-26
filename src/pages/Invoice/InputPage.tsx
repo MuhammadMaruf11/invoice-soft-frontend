@@ -1,44 +1,52 @@
 import { useEffect, useState } from 'react';
-
-import { Link, useNavigate } from "react-router-dom";
-
+import { Link } from "react-router-dom";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { PrivateAPI, PublicAPI } from '../../helper/api';
 import Layout from '../../components/Layout/Layout';
 import CommonBanner from '../../components/Banner/CommonBanner';
 
-// global variables 
-const userToken = localStorage.getItem('userToken');
-const onetimeAccess = localStorage.getItem('onetimeaccess');
+// Define types for customer data and invoice items
+interface InvoiceItem {
+    description: string;
+    quantity: number;
+    price: number;
+    amount: number;
+}
+
+interface CustomerData {
+    customerName: string;
+    customerAddress: string;
+    customerPhone: string;
+    date: string;
+    invoiceDetails: string;
+    userId: string;
+    items: InvoiceItem[];
+    total: number;
+    prepaid: number;
+    balance: number;
+    delivery: string;
+}
+
+// Get values from localStorage with default fallback
+const userToken = localStorage.getItem('userToken') || '';
+const onetimeAccess = localStorage.getItem('onetimeaccess') || '';
 
 const InputPage = () => {
-
-
     const currentDate = new Date().toISOString().split('T')[0];
 
-    const navigate = useNavigate();
 
-
-    // useEffect(() => {
-    //     if (userToken) {
-    //         localStorage.removeItem('onetimeaccess')
-    //     } else if (onetimeAccess && !userToken) {
-    //         // Redirect to the registration page if onetimeaccess is true
-    //         navigate('/user/register');
-    //     }
-    // }, [navigate]);
-
-    const [customerData, setCustomerData] = useState({
+    const [customerData, setCustomerData] = useState<CustomerData>({
         customerName: '',
         customerAddress: '',
         customerPhone: '',
         date: currentDate,
         invoiceDetails: '',
+        userId: "",
         items: [{
             description: '',
             quantity: 1,
-            price: '',
+            price: 0,
             amount: 0,
         }],
         total: 0,
@@ -47,22 +55,21 @@ const InputPage = () => {
         delivery: ''
     });
 
-    const modules = {
-        toolbar: [
-            [{ header: [1, 2, 3, 4, 5, 6, false] }],
-            [{ font: [] }],
-            [{ size: [] }],
-            ["bold", "italic", "underline", "strike", "blockquote"],
-            [
-                { list: "ordered" },
-                { list: "bullet" },
-                { indent: "-1" },
-                { indent: "+1" },
-            ],
-            ["link"],
-            // ["link", "image", "video"],
-        ],
-    };
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                const response = await PrivateAPI.get('/backend');
+                const data = response.data.user;
+                setCustomerData(prevState => ({
+                    ...prevState,
+                    userId: data.id // Update only the userId
+                }));
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        };
+        fetchUser();
+    }, []);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -72,74 +79,34 @@ const InputPage = () => {
         }));
     };
 
-    const handleModelChange = (event) => {
+    const handleModelChange = (value: string) => {
         setCustomerData(prevData => ({
             ...prevData,
-            invoiceDetails: event
+            invoiceDetails: value
         }));
-    }
+    };
 
-    const handleItemChange = (index: number, field: string, value: string | number) => {
+    const handleItemChange = (index: number, field: keyof InvoiceItem, value: string | number) => {
         setCustomerData(prevData => {
             const updatedItems = [...prevData.items];
+            const updatedItem = { ...updatedItems[index], [field]: value };
 
-            let amountItem = 0.00;
-            if (field === 'quantity')
-                amountItem = value * updatedItems[index]?.price;
-            else if (field === 'price')
-                amountItem = updatedItems[index]?.quantity * value;
-            else {
-                amountItem = updatedItems[index]?.quantity * updatedItems[index]?.price;
-            }
+            let amount = 0;
+            if (field === 'quantity') amount = Number(value) * updatedItem.price;
+            if (field === 'price') amount = updatedItem.quantity * Number(value);
 
-            const updatedItem = {
-                ...updatedItems[index],
-                [field]: value,
-                amount: parseFloat(amountItem).toFixed(2),
-            };
+            updatedItem.amount = parseFloat(amount.toString());
 
             updatedItems[index] = updatedItem;
 
-            const subtotalAmount = updatedItems.reduce(
-                (acc, item) => Number(acc) + Number(item.quantity * item.price),
-                0
-            );
-
-            const balanceAmount = subtotalAmount - prevData.prepaid;
+            const total = updatedItems.reduce((acc, item) => acc + item.quantity * item.price, 0);
+            const balance = total - prevData.prepaid;
 
             return {
                 ...prevData,
                 items: updatedItems,
-                total: parseFloat(subtotalAmount).toFixed(2),
-                balance: parseFloat(balanceAmount).toFixed(2),
-            };
-        });
-
-    };
-
-    const handleChangeAmount = (e) => {
-        const { name, value } = e.target;
-
-        setCustomerData(prevData => {
-            const updatedItems = [...prevData.items];
-            let updatedPrepaid = prevData.prepaid;
-            let updatedBalance = prevData.balance;
-
-            if (name === 'prepaid') {
-                updatedPrepaid = parseFloat(value);
-            }
-
-            const subtotalAmount = updatedItems.reduce(
-                (acc, item) => acc + item.quantity * item.price,
-                0
-            );
-
-            updatedBalance = subtotalAmount - updatedPrepaid;
-
-            return {
-                ...prevData,
-                prepaid: updatedPrepaid,
-                balance: parseFloat(updatedBalance).toFixed(2),
+                total: parseFloat(total.toString()),
+                balance: parseFloat(balance.toString())
             };
         });
     };
@@ -147,12 +114,10 @@ const InputPage = () => {
     const handleAddItem = () => {
         setCustomerData(prevData => ({
             ...prevData,
-            items: [...prevData.items, {
-                description: '',
-                quantity: 1,
-                price: '',
-                amount: 0,
-            }],
+            items: [
+                ...prevData.items,
+                { description: '', quantity: 1, price: 0, amount: 0 }
+            ]
         }));
     };
 
@@ -161,18 +126,29 @@ const InputPage = () => {
             const updatedItems = [...prevData.items];
             updatedItems.splice(index, 1);
 
-            const subtotalAmount = updatedItems.reduce(
-                (acc, item) => Number(acc) + Number(item.quantity * item.price),
-                0
-            );
-
-            const balanceAmount = subtotalAmount - prevData.prepaid;
+            const total = updatedItems.reduce((acc, item) => acc + item.quantity * item.price, 0);
+            const balance = total - prevData.prepaid;
 
             return {
                 ...prevData,
                 items: updatedItems,
-                total: parseFloat(subtotalAmount).toFixed(2),
-                balance: parseFloat(balanceAmount).toFixed(2),
+                total: parseFloat(total.toString()),
+                balance: parseFloat(balance.toString())
+            };
+        });
+    };
+
+    const handleChangeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setCustomerData(prevData => {
+            const total = prevData.items.reduce((acc, item) => acc + item.quantity * item.price, 0);
+            const prepaid = name === 'prepaid' ? parseFloat(value) : prevData.prepaid;
+            const balance = total - prepaid;
+
+            return {
+                ...prevData,
+                prepaid,
+                balance: parseFloat(balance.toString())
             };
         });
     };
@@ -180,55 +156,45 @@ const InputPage = () => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            // Here, you can use Axios or any other library to make an HTTP request
             await PublicAPI.post('/free-trial', customerData);
-            // await PrivateAPI.post('/invoice', customerData);
-
-            // if (!userToken) {
-            //     // If userToken is not found and user is not found, set one-time access
-            //     localStorage.setItem('onetimeaccess', 'true');
-            //     console.log('One-time access granted');
-            // } else if (userToken) {
-            //     // If userToken is found and user is found, remove one-time access if it exists
-            //     if (localStorage.getItem('onetimeaccess')) {
-            //         localStorage.removeItem('onetimeaccess');
-            //         console.log('One-time access removed');
-            //     }
-            // }
 
             if (!onetimeAccess) {
                 localStorage.setItem('onetimeaccess', 'true');
                 console.log('One-time access granted');
             }
 
-
             setCustomerData({
+                userId: '',
                 customerName: '',
                 customerAddress: '',
                 customerPhone: '',
                 invoiceDetails: '',
                 date: currentDate,
-                items: [{
-                    description: '',
-                    quantity: 1,
-                    price: '',
-                    amount: 0,
-                }],
+                items: [{ description: '', quantity: 1, price: 0, amount: 0 }],
                 total: 0,
                 prepaid: 0,
                 balance: 0,
                 delivery: ''
-            })
+            });
+
             setTimeout(() => {
-                window.open("/invoice/preview", '_self');
+                window.open('/invoice/preview', '_self')
             }, 1500);
         } catch (error) {
-            console.error("error " + error);
+            console.error("Error submitting form:", error);
         }
     };
 
-    console.log('customerData', customerData);
-
+    const modules = {
+        toolbar: [
+            [{ header: [1, 2, 3, 4, 5, 6, false] }],
+            [{ font: [] }],
+            [{ size: [] }],
+            ["bold", "italic", "underline", "strike", "blockquote"],
+            [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }],
+            ["link"]
+        ],
+    };
     return (
         <Layout>
             <CommonBanner bannerTitle='Invoice Input Page' />
@@ -426,7 +392,7 @@ const InputPage = () => {
                         <div className="row">
                             <div className="col-12 text-center">
                                 <h2 className='mb-4 text-danger'>Your one-time access has already been used!</h2>
-                                <p>To create unlimited invoices, please visit your <Link className='text-theme fw-bold' to='/user'>PROFILE</Link> and click the <u className='text-theme fw-bold'>'Unlimited Access'</u> button.</p>
+                                <p>To create unlimited invoices, please visit your <Link className='text-theme fw-bold' to='/user'>PROFILE</Link> and click the <u className='text-theme fw-bold'>'Unlimited Invoice'</u> button.</p>
                             </div>
                         </div>
                     </div>

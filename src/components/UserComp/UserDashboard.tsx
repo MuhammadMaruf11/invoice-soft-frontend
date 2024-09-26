@@ -3,6 +3,8 @@ import { PrivateAPI, PublicAPI } from "../../helper/api";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
 
+// global variables 
+const onetimeAccess = localStorage.getItem('onetimeaccess');
 
 const UserDashboard = () => {
 
@@ -18,13 +20,25 @@ const UserDashboard = () => {
         fetchUser()
     }, [])
 
+    const handleUnlimitedAccess = () => {
+
+        try {
+            localStorage.setItem('unlimitedAccess', 'true');
+            if (onetimeAccess) {
+                localStorage.removeItem('onetimeaccess')
+            }
+        } catch (error) {
+            console.error('error', error)
+        }
+    }
+
 
     const handleLogout = async () => {
         try {
             const response = await PublicAPI.post("/api/auth/logout",)
             const data = response.data;
             console.log('data', data);
-            // localStorage.removeItem('userToken');
+            localStorage.removeItem('userToken');
             toast.success("Logout Successfully", {
                 position: "top-center",
                 autoClose: 2000,
@@ -35,9 +49,9 @@ const UserDashboard = () => {
                 progress: undefined,
                 theme: "colored",
             });
-            // setTimeout(() => {
-            //     window.open('/user/login', '_slef')
-            // }, 1000);
+            setTimeout(() => {
+                window.open('/user/login', '_slef')
+            }, 1000);
         } catch (error) {
             //  console.error('error: ', error.message);
             toast.error("Logout failed!", {
@@ -64,8 +78,8 @@ const UserDashboard = () => {
                 <div className="row">
                     <div className="col-12">
                         <div className="d-flex justify-content-center gap-3">
-                            <Link className="btn btn-success btn-lg" to='/free-trial'>Unlimited Access</Link>
-                            <button className="btn btn-secondary btn-lg" onClick={handleLogout}>Log Out</button>
+                            <Link className="btn btn-success btn-lg" to='/unlimited-invoice' onClick={handleUnlimitedAccess}>Unlimited Invoice</Link>
+                            <button className="btn btn-dark btn-lg" onClick={handleLogout}>Log Out</button>
                         </div>
                     </div>
                 </div>

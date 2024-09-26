@@ -10,12 +10,12 @@ import { useUserAuth } from './hooks/useUserAuth ';
 import { useAdminAuth } from './hooks/useAdminAuth ';
 import InputPage from './pages/Invoice/InputPage';
 import PreviewPage from './pages/Invoice/PreviewPage';
+import InputUnlimitedPage from './pages/Invoice/InputUnlimitedPage';
 
 function App() {
 
   const { isAuthenticated } = useUserAuth()
   const adminAuth = useAdminAuth()
-  console.log('userAuth', isAuthenticated);
   return (
     <>
       <Routes>
@@ -23,9 +23,12 @@ function App() {
         <Route path="/*" element={<Error />} />
 
         <Route path="/" element={<Home />} />
+        <Route path="/free-trial" element={<InputPage />} />
+        <Route path="/invoice/preview" element={<PreviewPage />} />
 
         {/* User routes herer  */}
         <Route path="/user" element={isAuthenticated ? <Dashboard /> : <Navigate to="/user/login" />} />
+        <Route path="/unlimited-invoice" element={isAuthenticated ? <InputUnlimitedPage /> : <Navigate to="/user/login" />} />
         <Route path="/user/login" element={!isAuthenticated ? <Login /> : <Navigate to="/user" />} />
         <Route path="/user/register" element={!isAuthenticated ? <Register /> : <Navigate to="/user" />} />
 
@@ -35,8 +38,6 @@ function App() {
         <Route path="/admin/login" element={!adminAuth ? <AdminLogin /> : <Navigate to="/admin" />} />
         <Route path="/admin" element={adminAuth ? <AdminDashboard /> : <Navigate to="/admin/login" />} />
 
-        <Route path="/free-trial" element={<InputPage />} />
-        <Route path="/invoice/preview" element={<PreviewPage />} />
       </Routes>
     </>
   )

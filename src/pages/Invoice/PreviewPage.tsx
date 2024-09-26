@@ -48,7 +48,6 @@ const PreviewPage = () => {
 
     useEffect(() => {
         if (invoices && invoiceDetailsRef.current) {
-            console.log('object', invoiceDetailsRef.current);
             // Set the inner HTML of the paragraph using ref
             invoiceDetailsRef.current.innerHTML = invoices?.invoiceDetails;
         }
@@ -78,7 +77,7 @@ const PreviewPage = () => {
         <Layout>
             <CommonBanner bannerTitle='Invoice Preview Page' />
             <section>
-                <div className="container">
+                <div className="container py-4">
                     <div className="row">
                         <div className="col-12">
                             <div id="tablePdf" className="invoice-container">
