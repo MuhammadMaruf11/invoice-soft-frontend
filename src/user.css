@@ -21,37 +21,6 @@ input[type="date"] {
   box-sizing: border-box;
 }
 
-button {
-  background-color: #4caf50;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #45a049;
-}
-
-.btn-add {
-  background: green;
-  margin-right: 8px;
-}
-.btn-dlt {
-  background: red;
-}
-
-button[type="submit"] {
-  background-color: #008cba;
-  margin: auto;
-  display: flex;
-}
-
-button[type="submit"]:hover {
-  background-color: #005f78;
-}
-
 .item-container {
   display: flex;
   align-items: center;

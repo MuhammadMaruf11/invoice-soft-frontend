@@ -11,8 +11,7 @@ const UserDashboard = () => {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const response = await PrivateAPI.get('/backend')
-                console.log('res', response);
+                await PrivateAPI.get('/backend')
             } catch (error) {
                 console.error('err,', error);
             }

@@ -57,6 +57,10 @@ a:hover {
   text-decoration: none;
 }
 
+p {
+  margin-bottom: 0;
+}
+
 button,
 .btn {
   -webkit-transition: all 0.3s linear 0s;
@@ -215,17 +219,6 @@ label {
 }
 
 /* Button */
-.btn-theme {
-  color: #fff;
-  border-color: #4cc5cc;
-  background: #4cc5cc;
-}
-
-.btn-theme-2 {
-  color: #fff;
-  border-color: #156e9a;
-  background: #156e9a;
-}
 
 .btn-rounded {
   border-radius: 100% !important;
@@ -501,6 +494,8 @@ table *,
 
 /* footer css end */
 
+/* invoice css start  */
+
 .invoice-container {
   max-width: 1440px;
   border-radius: 5px;
@@ -521,16 +516,10 @@ table *,
   height: auto;
 }
 
-.customer-info,
-.customer-details {
+.info-item {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  margin-bottom: 20px;
-}
-
-.info-item,
-.details-item {
-  margin-bottom: 10px;
 }
 
 .table-wrap {
@@ -544,21 +533,24 @@ table *,
 
 .table th,
 .table td {
-  border: 1px solid #ddd;
+  border: 1px solid #c7e3df;
   padding: 8px;
   text-align: left;
 }
 
 .table th {
-  background-color: #f2f2f2;
+  background-color: #c7e3df;
 }
 
 .sl-no {
-  width: 5%;
+  width: 7.5%;
+  text-align: center;
 }
 
-.text-right {
-  text-align: right;
+.delivery-date strong {
+  color: #156e9a;
+  text-decoration-line: underline;
+  text-decoration-style: double;
 }
 
 .loader-container {
@@ -611,11 +603,9 @@ table *,
 .customer-details {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 20px;
 }
 
-.info-item,
-.details-item {
+.info-item {
   width: 45%;
 }
 
@@ -629,38 +619,21 @@ table *,
 }
 
 .table {
-  border: 1px solid #ddd;
+  border: 1px solid #c7e3df;
   width: 100%;
 }
 
 .table th,
 .table td {
   padding: 8px;
-  text-align: left;
-  border: 1px solid #ddd;
+  border: 1px solid #c7e3df;
 }
 
 .table th {
   font-weight: bold;
 }
 
-.sl-no {
-  width: 50px;
-  text-align: center;
-}
-
-.text-right {
-  text-align: right;
-}
-
 /* Additional styles */
-
-.customer-name,
-.date,
-.address,
-.phone {
-  font-weight: bold;
-}
 
 .amount {
   text-align: right;

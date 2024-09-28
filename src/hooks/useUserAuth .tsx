@@ -1,14 +1,11 @@
 // useUserAuth.ts
-import { useState, useEffect } from 'react';
+import { useContext } from 'react';
+import { UserAuthContext } from './UserAuthContext.tsx';
 
 export const useUserAuth = () => {
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-
-    useEffect(() => {
-        // Check if a user token exists in localStorage
-        const token = localStorage.getItem('userToken');
-        setIsAuthenticated(!!token); // Convert token to boolean
-    }, []);
-
-    return { isAuthenticated };
+    const context = useContext(UserAuthContext);
+    if (!context) {
+        throw new Error('useUserAuth must be used within a UserAuthProvider');
+    }
+    return context;
 };

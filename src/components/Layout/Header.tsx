@@ -1,13 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
 import { Link } from "react-router-dom";
-import { useUserAuth } from "../../hooks/useUserAuth ";
 import { FaUser } from "react-icons/fa";
 import { BiLogInCircle } from "react-icons/bi";
+import { useUserAuth } from "../../hooks/useUserAuth ";
+
 
 const Header = () => {
 
-  const { isAuthenticated } = useUserAuth()
+  const { isAuthenticated } = useUserAuth();
 
   return (
     <>

@@ -9,11 +9,14 @@ import "react-toastify/dist/ReactToastify.css";
 import './user.css'
 import './admin.css'
 import './index.css'
+import { UserAuthProvider } from './hooks/UserAuthContext.tsx';
 
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <BrowserRouter>
-    <ScrollToTop />
-    <App />
-  </BrowserRouter>
+  <UserAuthProvider>
+    <BrowserRouter>
+      <ScrollToTop />
+      <App />
+    </BrowserRouter>
+  </UserAuthProvider>
 )

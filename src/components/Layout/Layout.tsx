@@ -4,12 +4,8 @@ import Footer from './Footer';
 import Motion from './Motion';
 
 
+const Layout = ({ children }: { children: ReactNode }) => {
 
-type MainContent = {
-    children?: ReactNode; // Use ReactNode as the type for children
-};
-
-const Layout = ({ children }: MainContent) => {
     return (
         <>
             <Header />

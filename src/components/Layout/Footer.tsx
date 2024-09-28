@@ -1,8 +1,14 @@
+
 import { FaFacebook, FaGithub, FaLinkedin, FaStackOverflow } from 'react-icons/fa';
 import { FaHashnode } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
+import { useUserAuth } from '../../hooks/useUserAuth ';
+
 
 const Footer = () => {
+
+    const { isAuthenticated } = useUserAuth();
+
     return (
         <>
             <footer className="footer-area">
@@ -56,9 +62,11 @@ const Footer = () => {
                                         <li>
                                             <Link to='/docs'>Documentation</Link>
                                         </li>
-                                        <li>
+                                        {isAuthenticated ? <li>
+                                            <Link to='/unlimited-invoice'>Unlimited Invoice</Link>
+                                        </li> : <li>
                                             <Link to='/free-trial'>Free Trial</Link>
-                                        </li>
+                                        </li>}
                                         <li>
                                             <Link to='/contact'>Contact</Link>
                                         </li>
@@ -70,7 +78,7 @@ const Footer = () => {
                                     <ul>
                                         <li>
                                             <h4>Mobile: </h4>
-                                            <Link to='tel:+8801821795775'>+01821795775</Link>
+                                            <Link to='tel:+8801821795775'>01821795775</Link>
                                         </li>
                                         <li>
                                             <h4>Email: </h4>

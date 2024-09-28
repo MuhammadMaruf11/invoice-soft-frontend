@@ -5,6 +5,7 @@ import 'react-quill/dist/quill.snow.css';
 import { PrivateAPI } from '../../helper/api';
 import Layout from '../../components/Layout/Layout';
 import CommonBanner from '../../components/Banner/CommonBanner';
+import { FaMinusCircle, FaPlusCircle } from 'react-icons/fa';
 
 // Define types for customer data and invoice items
 interface InvoiceItem {
@@ -299,7 +300,7 @@ const InputUnlimitedPage = () => {
                                                     {customerData?.items?.map((item, index: number) => {
                                                         return (
                                                             <tr key={index}>
-                                                                <td className="sl-no-style">
+                                                                <td className="">
                                                                     {index + 1}
                                                                 </td>
                                                                 <td>
@@ -328,9 +329,10 @@ const InputUnlimitedPage = () => {
                                                                         value={item.amount}
                                                                         readOnly />
                                                                 </td>
-                                                                <td>
-                                                                    <button type="button" className='btn-add' onClick={handleAddItem}>Add </button>
-                                                                    {index > 0 && (<button type="button" className='btn-dlt' onClick={() => handleRemoveItem(index)}>Dlt</button>)}
+                                                                <td className='text-center align-middle'>
+                                                                    <button type="button" className='btn btn-primary me-1' onClick={handleAddItem}><FaPlusCircle /> </button>
+
+                                                                    {index > 0 && (<button type="button" className='btn btn-danger' onClick={() => handleRemoveItem(index)}><FaMinusCircle /></button>)}
                                                                 </td>
                                                             </tr>
                                                         );
@@ -338,7 +340,7 @@ const InputUnlimitedPage = () => {
                                                     <tr>
                                                         <td colSpan={2}></td>
                                                         <td><strong>Total :</strong></td>
-                                                        <td colSpan={2} className="text-right">
+                                                        <td colSpan={2} className="text-end">
                                                             <input style={{ textAlign: 'end' }}
                                                                 type="number"
                                                                 name="total"
@@ -346,12 +348,12 @@ const InputUnlimitedPage = () => {
                                                                 readOnly
                                                             />
                                                         </td>
-                                                        <td rowSpan={4}> <button type="submit">Submit</button></td>
+                                                        <td className='align-middle text-center' rowSpan={4}> <button className='btn btn-success' type="submit">Submit</button></td>
                                                     </tr>
                                                     <tr>
                                                         <td colSpan={2}></td>
                                                         <td><strong>Prepaid :</strong></td>
-                                                        <td colSpan={2} className="text-right">
+                                                        <td colSpan={2} className="text-end">
                                                             <input style={{ textAlign: 'end' }}
                                                                 type="number"
                                                                 name="prepaid"
@@ -363,7 +365,7 @@ const InputUnlimitedPage = () => {
                                                     <tr>
                                                         <td colSpan={2}></td>
                                                         <td><strong>Balance :</strong></td>
-                                                        <td colSpan={2} className="text-right">
+                                                        <td colSpan={2} className="text-end">
                                                             <input style={{ textAlign: 'end' }}
                                                                 type="number"
                                                                 name="balance"
@@ -375,7 +377,7 @@ const InputUnlimitedPage = () => {
                                                     <tr>
                                                         <td colSpan={2} ></td>
                                                         <td><strong>Delivery :</strong></td>
-                                                        <td colSpan={2} className="text-right">
+                                                        <td colSpan={2} className="text-end">
                                                             <input type="date"
                                                                 name="delivery"
                                                                 value={customerData.delivery}

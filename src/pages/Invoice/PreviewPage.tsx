@@ -1,20 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
-
 import { jsPDF } from "jspdf";
-import companyLogo from '/company-logo.png'
+import companyLogo from '/company-logo.png';
 import 'react-quill/dist/quill.snow.css';
 import { PrivateAPI } from '../../helper/api';
 import Layout from '../../components/Layout/Layout';
 import CommonBanner from '../../components/Banner/CommonBanner';
-
-interface Invoice {
-    customerName: string;
-    date: string;
-    customerAddress: string;
-    customerPhone: string;
-    invoiceDetails: string;
-    items: Item[];
-}
+import { FaFilePdf } from 'react-icons/fa';
 
 interface Item {
     description: string;
@@ -23,55 +14,71 @@ interface Item {
     amount: number;
 }
 
-const PreviewPage = () => {
-    const [invoices, setInvoices] = useState<Invoice[]>([]);
-    const [isLoading, setLoading] = useState<boolean>(false);
+interface Invoice {
+    customerName: string;
+    date: string;
+    customerAddress: string;
+    customerPhone: string;
+    invoiceDetails: string;
+    items: Item[];
+    total: number;
+    prepaid: number;
+    balance: number;
+    delivery: string;
+}
 
+const PreviewPage: React.FC = () => {
+    const [invoice, setInvoice] = useState<Invoice | null>(null);
+    const [isLoading, setLoading] = useState<boolean>(true);
     const invoiceDetailsRef = useRef<HTMLParagraphElement>(null);
 
     useEffect(() => {
-        setLoading(true);
         const fetchInvoices = async () => {
+            setLoading(true);
             try {
-                const userId = localStorage.getItem('userId')
-                const response = await PrivateAPI.get('/invoice/' + userId); // adjust URL based on your backend setup
-                const data = response.data[response.data.length - 1]
-                setInvoices(data);
-                setLoading(false);
+                const userId = localStorage.getItem('userId');
+                if (!userId) {
+                    throw new Error('User ID not found');
+                }
+
+                const response = await PrivateAPI.get(`/invoice/${userId}`);
+                const data = response.data[response.data.length - 1];
+                setInvoice(data);
             } catch (error) {
                 console.error(error);
+            } finally {
                 setLoading(false);
             }
         };
+
         fetchInvoices();
     }, []);
 
     useEffect(() => {
-        if (invoices && invoiceDetailsRef.current) {
-            // Set the inner HTML of the paragraph using ref
-            invoiceDetailsRef.current.innerHTML = invoices?.invoiceDetails;
+        if (invoice && invoiceDetailsRef.current) {
+            invoiceDetailsRef.current.innerHTML = invoice.invoiceDetails;
         }
-    }, [invoices]);
+    }, [invoice]);
 
     const exportPDF = () => {
-        // Landscape export, 2×4 inches
         const doc = new jsPDF({ format: 'a4', orientation: 'p' });
-        const tablePdf = document.querySelector("#tablePdf");
+        const tablePdf = document.querySelector("#tablePdf") as HTMLElement; // Cast to HTMLElement
 
-        doc.html(tablePdf, {
-            callback: function (doc) {
-                // Add image after rendering the HTML
-
-                doc.save(`invoice.pdf`);
-            },
-            margin: [4, 4, 4, 4],
-            autoPaging: "slice",
-            x: 0,
-            y: 0,
-            width: 202, // Target width in the PDF document
-            windowWidth: 813, // Window width in CSS pixels
-        });
+        if (tablePdf) {
+            doc.html(tablePdf, {
+                callback: function (doc) {
+                    doc.save(`invoice.pdf`);
+                },
+                margin: [4, 0, 4, 0],
+                autoPaging: "slice",
+                x: 0,
+                y: 0,
+                width: 210, // Target width in the PDF document
+                windowWidth: 1024, // Window width in CSS pixels
+            });
+        }
     };
+
 
     return (
         <Layout>
@@ -83,128 +90,106 @@ const PreviewPage = () => {
                             <div id="tablePdf" className="invoice-container">
                                 <div className="invoice-header">
                                     <div className="logo-container">
-                                        <img src={companyLogo} alt="logo" />
+                                        <img src={companyLogo} alt="Company Logo" />
                                     </div>
                                     <div className="company-address">
                                         <ul>
                                             <li>
-                                                <strong>Phone: </strong>+9613661122 &nbsp;
-                                                <strong>Email: </strong>info@digitaldecoderltd.com
+                                                <strong>Phone:</strong> +9613661122 &nbsp;
+                                                <strong>Email:</strong> info@digitaldecoderltd.com
                                             </li>
                                             <li>
-                                                <strong>Address: </strong>E-9/6, China Town Naya Paltan, Dhaka - 1000, Bangladesh
+                                                <strong>Address:</strong> E-9/6, China Town Naya Paltan, Dhaka - 1000, Bangladesh
                                             </li>
                                         </ul>
                                     </div>
                                 </div>
-                                {isLoading ? 'Loading...' :
+                                {isLoading ? (
+                                    <p>Loading...</p>
+                                ) : invoice ? (
                                     <>
                                         <div className="customer-info">
                                             <div className="info-item">
-                                                <p>
-                                                    <strong>Customer's Name :</strong>
-                                                </p>
-                                                <p className="customer-name">
-                                                    {invoices?.customerName}
-                                                </p>
+                                                <p><strong>Customer's Name:</strong></p>
+                                                <p className="customer-name">{invoice.customerName}</p>
                                             </div>
                                             <div className="info-item">
-                                                <p>
-                                                    <strong> Date :</strong>
-                                                </p>
-                                                <p className="date">
-                                                    {invoices?.date && invoices?.date.slice(0, 10)}
-                                                </p>
+                                                <p><strong>Date:</strong></p>
+                                                <p className="date">{invoice.date.slice(0, 10)}</p>
                                             </div>
                                         </div>
+                                        <div className="customer-info">
+                                            <div className="info-item">
+                                                <p><strong>Address:</strong></p>
+                                                <p className="address">{invoice.customerAddress}</p>
+                                            </div>
+                                            <div className="info-item">
+                                                <p><strong>Phone:</strong></p>
+                                                <p className="phone">{invoice.customerPhone}</p>
+                                            </div>
+                                        </div>
+                                        <br />
                                         <div className="customer-details">
                                             <div className="details-item">
-                                                <p>
-                                                    <strong>Address :</strong>
-                                                </p>
-                                                <p className="address">
-                                                    {invoices?.customerAddress}
-                                                </p>
-                                            </div>
-                                            <div className="details-item">
-                                                <p>
-                                                    <strong> Phone :</strong>
-                                                </p>
-                                                <p className="phone">
-                                                    {invoices?.customerPhone}
-                                                </p>
+                                                <p><strong>Invoice Details:</strong></p>
+                                                <p ref={invoiceDetailsRef}></p>
                                             </div>
                                         </div>
-                                        <div className="customer-details">
-                                            <div className="details-item">
-                                                <p>
-                                                    <strong>Invoice Details :</strong>
-                                                </p>
-                                                <p className="ql-editor" ref={invoiceDetailsRef}>
-                                                </p>
-                                            </div>
-                                        </div>
+                                        <br />
                                         <div className="invoice-table">
                                             <div className="table-wrap">
                                                 <table className="table">
                                                     <thead>
                                                         <tr>
-                                                            <th className="sl-no">
-                                                                Sl No.
-                                                            </th>
+                                                            <th className="sl-no">Sl No.</th>
                                                             <th>Items</th>
-                                                            <th>
-                                                                <strong>Quantity</strong>
-                                                            </th>
-                                                            <th>
-                                                                <strong>Price</strong>
-                                                            </th>
-                                                            <th>
-                                                                <strong>Amount</strong>
-                                                            </th>
+                                                            <th><strong>Quantity</strong></th>
+                                                            <th><strong>Price</strong></th>
+                                                            <th><strong>Amount</strong></th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        {invoices?.items?.map((_, index: number) => {
-                                                            const item = invoices?.items?.[index];
-                                                            return (
-                                                                <tr key={index}>
-                                                                    <td className="sl-no-style">{index + 1}</td>
-                                                                    <td>{item?.description}</td>
-                                                                    <td>{item?.quantity}</td>
-                                                                    <td>{item?.price}</td>
-                                                                    <td>{item?.amount}</td>
-                                                                </tr>
-                                                            )
-                                                        })}
+                                                        {invoice.items.map((item, index) => (
+                                                            <tr key={index}>
+                                                                <td className="text-center">{index + 1}</td>
+                                                                <td>{item.description}</td>
+                                                                <td className='text-end'>{item.quantity}</td>
+                                                                <td className='text-end'>{item.price}</td>
+                                                                <td className='text-end'>{item.amount}</td>
+                                                            </tr>
+                                                        ))}
                                                         <tr>
                                                             <td colSpan={3}></td>
-                                                            <td><strong>Total :</strong></td>
-                                                            <td colSpan={2} className="text-right"><strong><u>{invoices?.total}</u></strong></td>
+                                                            <td><strong>Total:</strong></td>
+                                                            <td colSpan={2} className="text-end"><strong><u>{invoice.total}</u></strong></td>
                                                         </tr>
                                                         <tr>
                                                             <td colSpan={3}></td>
-                                                            <td><strong>Prepaid :</strong></td>
-                                                            <td colSpan={2} className="text-right"><strong>{invoices?.prepaid}</strong></td>
+                                                            <td><strong>Prepaid:</strong></td>
+                                                            <td colSpan={2} className="text-end"><strong>{invoice.prepaid}</strong></td>
                                                         </tr>
                                                         <tr>
                                                             <td colSpan={3}></td>
-                                                            <td><strong>Balance :</strong></td>
-                                                            <td colSpan={2} className="text-right"> <strong>  {invoices?.balance}</strong></td>
+                                                            <td><strong>Balance:</strong></td>
+                                                            <td colSpan={2} className="text-end"><strong>{invoice.balance}</strong></td>
                                                         </tr>
                                                         <tr>
                                                             <td colSpan={3}></td>
-                                                            <td><strong>Delivery :</strong></td>
-                                                            <td colSpan={3} className="text-right" style={{ color: '#00d100' }}>  <strong> {invoices?.delivery}</strong></td>
+                                                            <td><strong>Delivery:</strong></td>
+                                                            <td colSpan={3} className="text-end delivery-date"><strong>{invoice.delivery}</strong></td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
                                             </div>
                                         </div>
-                                    </>}
-
+                                    </>
+                                ) : (
+                                    <p>No invoice found.</p>
+                                )}
                             </div>
-                            <button style={{ marginLeft: 'auto', display: 'flex', marginTop: "20px" }} onClick={exportPDF}>pdf</button>
+                            <button className='btn btn-info d-flex align-items-center gap-2 ms-auto btn-lg me-4' onClick={exportPDF}>
+                                <FaFilePdf /> <span>Download PDF</span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -212,6 +197,5 @@ const PreviewPage = () => {
         </Layout>
     );
 };
-
 
 export default PreviewPage;
