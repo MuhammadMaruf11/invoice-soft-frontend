@@ -7,7 +7,7 @@ import { useUserAuth } from '../../hooks/useUserAuth ';
 
 const Footer = () => {
 
-    const { isAuthenticated } = useUserAuth();
+    const { isUserAuthenticated } = useUserAuth();
 
     return (
         <>
@@ -62,7 +62,7 @@ const Footer = () => {
                                         <li>
                                             <Link to='/docs'>Documentation</Link>
                                         </li>
-                                        {isAuthenticated ? <li>
+                                        {isUserAuthenticated ? <li>
                                             <Link to='/unlimited-invoice'>Unlimited Invoice</Link>
                                         </li> : <li>
                                             <Link to='/free-trial'>Free Trial</Link>
@@ -82,7 +82,7 @@ const Footer = () => {
                                         </li>
                                         <li>
                                             <h4>Email: </h4>
-                                            <Link to='mailto:muhammad11maruf@gmail.com'>mailto:muhammad11maruf@gmail.com</Link>
+                                            <Link to='mailto:muhammad11maruf@gmail.com'>muhammad11maruf@gmail.com</Link>
                                         </li>
                                     </ul>
                                 </div>

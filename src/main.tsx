@@ -10,13 +10,16 @@ import './user.css'
 import './admin.css'
 import './index.css'
 import { UserAuthProvider } from './hooks/UserAuthContext.tsx';
+import { AdminAuthProvider } from './hooks/AdminAuthContext.tsx';
 
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <UserAuthProvider>
-    <BrowserRouter>
-      <ScrollToTop />
-      <App />
-    </BrowserRouter>
-  </UserAuthProvider>
+  <AdminAuthProvider>
+    <UserAuthProvider>
+      <BrowserRouter>
+        <ScrollToTop />
+        <App />
+      </BrowserRouter>
+    </UserAuthProvider>
+  </AdminAuthProvider>
 )

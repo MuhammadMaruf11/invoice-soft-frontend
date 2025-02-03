@@ -342,7 +342,7 @@ const InputPage = () => {
                                                             readOnly
                                                         />
                                                     </td>
-                                                    <td className='align-middle text-center' rowSpan={4}> <button type="submit">Submit</button></td>
+                                                    <td className='align-middle text-center' rowSpan={4}> <button type="submit" className='btn btn-success'>Submit</button></td>
                                                 </tr>
                                                 <tr>
                                                     <td colSpan={2}></td>

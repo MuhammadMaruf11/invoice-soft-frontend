@@ -11,11 +11,13 @@ import { useAdminAuth } from './hooks/useAdminAuth ';
 import InputPage from './pages/Invoice/InputPage';
 import PreviewPage from './pages/Invoice/PreviewPage';
 import InputUnlimitedPage from './pages/Invoice/InputUnlimitedPage';
+import AdminRegister from './pages/Admin/AdminRegister/AdminRegister';
+import AdminAllUsers from './pages/Admin/AdminAllUsers/AdminAllUsers';
 
 function App() {
 
-  const { isAuthenticated } = useUserAuth()
-  const adminAuth = useAdminAuth()
+  const { isUserAuthenticated } = useUserAuth()
+  const { isAdminAuthenticated } = useAdminAuth()
   return (
     <>
       <Routes>
@@ -27,16 +29,18 @@ function App() {
         <Route path="/invoice/preview" element={<PreviewPage />} />
 
         {/* User routes herer  */}
-        <Route path="/user" element={isAuthenticated ? <Dashboard /> : <Navigate to="/user/login" />} />
-        <Route path="/unlimited-invoice" element={isAuthenticated ? <InputUnlimitedPage /> : <Navigate to="/user/login" />} />
-        <Route path="/user/login" element={!isAuthenticated ? <Login /> : <Navigate to="/user" />} />
-        <Route path="/user/register" element={!isAuthenticated ? <Register /> : <Navigate to="/user" />} />
+        <Route path="/user/login" element={!isUserAuthenticated ? <Login /> : <Navigate to="/user" />} />
+        <Route path="/user/register" element={!isUserAuthenticated ? <Register /> : <Navigate to="/user" />} />
+        <Route path="/user" element={isUserAuthenticated ? <Dashboard /> : <Navigate to="/user/login" />} />
+        <Route path="/unlimited-invoice" element={isUserAuthenticated ? <InputUnlimitedPage /> : <Navigate to="/user/login" />} />
 
 
         {/* admin panel routes herer  */}
 
-        <Route path="/admin/login" element={!adminAuth ? <AdminLogin /> : <Navigate to="/admin" />} />
-        <Route path="/admin" element={adminAuth ? <AdminDashboard /> : <Navigate to="/admin/login" />} />
+        <Route path="/admin/register" element={!isAdminAuthenticated ? <AdminRegister /> : <Navigate to="/admin" />} />
+        <Route path="/admin/login" element={!isAdminAuthenticated ? <AdminLogin /> : <Navigate to="/admin" />} />
+        <Route path="/admin" element={isAdminAuthenticated ? <AdminDashboard /> : <Navigate to="/admin/login" />} />
+        <Route path="/admin/all-users" element={isAdminAuthenticated ? <AdminAllUsers /> : <Navigate to="/admin/login" />} />
 
       </Routes>
     </>

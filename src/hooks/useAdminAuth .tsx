@@ -1,14 +1,11 @@
-// useAdminAuth.ts
-import { useState, useEffect } from 'react';
+// useUserAuth.ts
+import { useContext } from 'react';
+import { AdminAuthContext } from './AdminAuthContext';
 
 export const useAdminAuth = () => {
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-
-    useEffect(() => {
-        // Check if an admin token exists in localStorage
-        const token = localStorage.getItem('adminToken');
-        setIsAuthenticated(!!token); // Convert token to boolean
-    }, []);
-
-    return { isAuthenticated };
+    const context = useContext(AdminAuthContext);
+    if (!context) {
+        throw new Error('useAdminAuth must be used within a AdminAuthProvider');
+    }
+    return context;
 };

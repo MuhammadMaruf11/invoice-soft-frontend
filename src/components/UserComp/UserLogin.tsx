@@ -94,7 +94,7 @@ const UserLogin = () => {
                                         required
                                     />
                                 </div>
-                                <button type="submit" className="w-100 mx-auto d-block">
+                                    <button type="submit" className="w-100 d-block btn btn-primary">
                                     Login
                                 </button>
                             </form>

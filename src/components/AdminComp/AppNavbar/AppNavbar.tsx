@@ -1,22 +1,24 @@
 import React from 'react';
 import { Navbar, Nav, Button } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 // react toastify
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { AdminAPI } from '../../../helper/api';
+import { apiList } from '../../../helper/apiList';
 
 interface NavbarProps {
     onToggleSidebar: () => void;
 }
 
 const AppNavbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
-    const navigate = useNavigate();
 
     // Logout component or function
     const handleLogOut = () => {
         try {
             // Clear token from client-side storage
-            window.localStorage.removeItem("token");
+            window.localStorage.removeItem("adminToken");
+            AdminAPI.post(apiList.ADMIN_LOGOUT)
             toast.success("Logout Successfully", {
                 position: "top-center",
                 autoClose: 2000,
@@ -28,7 +30,7 @@ const AppNavbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
                 theme: "colored",
             });
             setTimeout(() => {
-                navigate("/admin/login");
+                window.open("/admin/login", '_self');
             }, 1000);
         } catch (error) {
             toast.error("Logout failed!", {
@@ -50,8 +52,7 @@ const AppNavbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
 
             <div className="logo-wrap">
                 <Link to="/admin">
-                    {/* <img src={Logo} alt="logo" /> */}
-                    <span>Remover AI</span>
+                    <img src='/img/logo/main-logo.png' alt="logo" />
                 </Link>
             </div>
 
@@ -60,9 +61,6 @@ const AppNavbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
             </Button>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
-                <Nav className="ml-auto">
-                    <Nav.Link href="#profile">Profile</Nav.Link>
-                </Nav>
             </Navbar.Collapse>
             <div className="text-end">
                 <button className='btn btn-danger' onClick={handleLogOut}>Log out</button>

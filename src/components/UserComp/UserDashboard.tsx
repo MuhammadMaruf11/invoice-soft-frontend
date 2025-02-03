@@ -49,7 +49,7 @@ const UserDashboard = () => {
                 theme: "colored",
             });
             setTimeout(() => {
-                window.open('/user/login', '_slef')
+                window.open('/user/login', '_self')
             }, 1000);
         } catch (error) {
             //  console.error('error: ', error.message);

@@ -1,14 +1,16 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 // react toastify
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AdminAPI } from '../../../helper/api';
 import { apiList } from '../../../helper/apiList';
-import { Form, Button, Container, Row, Col } from 'react-bootstrap';
+import { Form, Button, Container, Row, Col } from "react-bootstrap";
 
+const AdminRegister = () => {
 
-const AdminLogin = () => {
+    const navigate = useNavigate();
+
 
     const [formData, setFormData] = useState({
         adminname: '',
@@ -20,13 +22,12 @@ const AdminLogin = () => {
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         try {
-            const response = await AdminAPI.post(apiList.ADMIN_LOGIN, formData)
-            const data = response?.data;
-            localStorage.setItem('adminToken', data?.token)
+            await AdminAPI.post(apiList.ADMIN_REGISTER, formData)
+
             toast.success("Successfully register", {
                 position: "top-center",
                 autoClose: 2000,
@@ -38,10 +39,10 @@ const AdminLogin = () => {
                 theme: "colored",
             });
             setTimeout(() => {
-                window.open('/admin', '_self')
+                navigate("/admin/login");
             }, 1500);
-        } catch (error: any) {
-            toast.error(error.response.data.message || "Incorrect Credential!", {
+        } catch (error) {
+            toast.error("Username or Password incorrect", {
                 position: "top-center",
                 autoClose: 2000,
                 hideProgressBar: true,
@@ -57,14 +58,14 @@ const AdminLogin = () => {
 
 
     return (
-        <section className='admin-login-area'>
-            <Container className=" d-flex justify-content-center align-items-center min-vh-100">
+        <section className="admin-login-area">
+            <Container className="d-flex justify-content-center align-items-center min-vh-100">
                 <ToastContainer />
                 <Row className="w-100">
                     <Col xs={12} md={6} lg={4} className="mx-auto">
                         <div className="login-form-wrap p-4 shadow rounded bg-white">
-                            <h2 className="text-center mb-4">Login</h2>
-                            <Form onSubmit={handleSignIn} className="login-form">
+                            <h2 className="text-center mb-4">Register</h2>
+                            <Form onSubmit={handleRegister}>
                                 <Form.Group className="mb-3" controlId="adminname">
                                     <Form.Label>Name</Form.Label>
                                     <Form.Control
@@ -74,6 +75,9 @@ const AdminLogin = () => {
                                         onChange={handleChange}
                                         required
                                     />
+                                    <Form.Control.Feedback type="invalid">
+                                        Please enter a valid name.
+                                    </Form.Control.Feedback>
                                 </Form.Group>
                                 <Form.Group className="mb-3" controlId="password">
                                     <Form.Label>Password</Form.Label>
@@ -84,9 +88,12 @@ const AdminLogin = () => {
                                         onChange={handleChange}
                                         required
                                     />
+                                    <Form.Control.Feedback type="invalid">
+                                        Password is required.
+                                    </Form.Control.Feedback>
                                 </Form.Group>
                                 <Button type="submit" className="w-100" variant="primary">
-                                    Login
+                                    Register
                                 </Button>
                             </Form>
                         </div>
@@ -97,4 +104,4 @@ const AdminLogin = () => {
     )
 }
 
-export default AdminLogin
+export default AdminRegister

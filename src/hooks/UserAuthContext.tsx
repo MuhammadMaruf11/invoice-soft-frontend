@@ -1,22 +1,23 @@
+/* eslint-disable react-refresh/only-export-components */
 // UserAuthContext.tsx
 import { createContext, useState, useEffect, ReactNode } from 'react';
 
 type UserAuthContextType = {
-    isAuthenticated: boolean;
+    isUserAuthenticated: boolean;
 };
 
 export const UserAuthContext = createContext<UserAuthContextType | undefined>(undefined);
 
 export const UserAuthProvider = ({ children }: { children: ReactNode }) => {
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+    const [isUserAuthenticated, setisUserAuthenticated] = useState<boolean>(false);
 
     useEffect(() => {
         const token = localStorage.getItem('userToken');
-        setIsAuthenticated(!!token); // Convert token to boolean
+        setisUserAuthenticated(!!token); // Convert token to boolean
     }, []);
 
     return (
-        <UserAuthContext.Provider value={{ isAuthenticated }}>
+        <UserAuthContext.Provider value={{ isUserAuthenticated }}>
             {children}
         </UserAuthContext.Provider>
     );

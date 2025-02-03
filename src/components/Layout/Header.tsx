@@ -8,7 +8,7 @@ import { useUserAuth } from "../../hooks/useUserAuth ";
 
 const Header = () => {
 
-  const { isAuthenticated } = useUserAuth();
+  const { isUserAuthenticated } = useUserAuth();
 
   return (
     <>
@@ -28,7 +28,7 @@ const Header = () => {
                 <li>
                   <Link to='/docs'>Documentation</Link>
                 </li>
-                {isAuthenticated ? <li>
+                {isUserAuthenticated ? <li>
                   <Link to='/unlimited-invoice'>Unlimited Invoice</Link>
                 </li> : <li>
                   <Link to='/free-trial'>Free Trial</Link>
@@ -41,7 +41,7 @@ const Header = () => {
             <div className="col-xl-2">
               <div className="header-right">
                 <ul>
-                  {isAuthenticated ? <li>
+                  {isUserAuthenticated ? <li>
                     <Link to='/user'><FaUser /> Profile</Link>
                   </li> : <li>
                     <Link to='/user/login'><BiLogInCircle /> Login</Link>
