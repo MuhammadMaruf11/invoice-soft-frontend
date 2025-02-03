@@ -1,5 +1,5 @@
 import axios from "axios";
-import { redirect } from "react-router-dom";
+// import { redirect } from "react-router-dom";
 
 const userToken = localStorage.getItem("userToken");
 const adminToken = localStorage.getItem("adminToken");
