@@ -16,13 +16,13 @@ const AppSidebar: React.FC<SidebarProps> = ({ isOpen }) => {
                     </Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                    <Nav.Link as={Link} to="/admin/plans">
-                        <i className="fas fa-wrench"></i> <span>Plans</span>
+                    <Nav.Link as={Link} to="/admin/all-users">
+                        <i className="fas fa-users"></i> <span>All User</span>
                     </Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                    <Nav.Link as={Link} to="/admin/all-users">
-                        <i className="fas fa-users"></i> <span>All User</span>
+                    <Nav.Link as={Link} to="/admin/user-invoice">
+                        <i className="fas fa-wrench"></i> <span>All Invoice</span>
                     </Nav.Link>
                 </Nav.Item>
                 <Nav.Item>

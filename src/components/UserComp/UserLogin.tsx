@@ -2,6 +2,7 @@ import { toast } from "react-toastify";
 import { PublicAPI } from "../../helper/api";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { apiList } from "../../helper/apiList";
 
 
 const UserLogin = () => {
@@ -22,7 +23,7 @@ const UserLogin = () => {
 
 
         try {
-            const response = await PublicAPI.post("/api/auth/login", formData)
+            const response = await PublicAPI.post(apiList.USER_LOGIN, formData)
             const data = response.data;
             localStorage.setItem("userToken", data.token);
             localStorage.setItem("userId", data.userId);
@@ -94,7 +95,7 @@ const UserLogin = () => {
                                         required
                                     />
                                 </div>
-                                    <button type="submit" className="w-100 d-block btn btn-primary">
+                                <button type="submit" className="w-100 d-block btn btn-primary">
                                     Login
                                 </button>
                             </form>

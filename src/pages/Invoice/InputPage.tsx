@@ -1,11 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link } from "react-router-dom";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { PrivateAPI, PublicAPI } from '../../helper/api';
+import { PublicAPI } from '../../helper/api';
 import Layout from '../../components/Layout/Layout';
 import CommonBanner from '../../components/Banner/CommonBanner';
 import { FaMinusCircle, FaPlusCircle } from 'react-icons/fa';
+import { v4 as uuidv4 } from 'uuid';
+import { Form, Button, Table, Container, Row, Col } from 'react-bootstrap';
+import { apiList } from '../../helper/apiList';
 
 // Define types for customer data and invoice items
 interface InvoiceItem {
@@ -43,7 +46,7 @@ const InputPage = () => {
         customerPhone: '',
         date: currentDate,
         invoiceDetails: '',
-        userId: "",
+        userId: uuidv4(),
         items: [{
             description: '',
             quantity: 1,
@@ -56,23 +59,8 @@ const InputPage = () => {
         delivery: ''
     });
 
-    useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                const response = await PrivateAPI.get('/backend');
-                const data = response.data.user;
-                setCustomerData(prevState => ({
-                    ...prevState,
-                    userId: data.id // Update only the userId
-                }));
-            } catch (error) {
-                console.error('Error fetching user data:', error);
-            }
-        };
-        fetchUser();
-    }, []);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setCustomerData(prevData => ({
             ...prevData,
@@ -157,7 +145,7 @@ const InputPage = () => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            await PublicAPI.post('/free-trial', customerData);
+            await PublicAPI.post(apiList.FREE_TRIAL, customerData);
 
             if (!onetimeAccess) {
                 localStorage.setItem('onetimeaccess', 'true');
@@ -199,224 +187,113 @@ const InputPage = () => {
     return (
         <Layout>
             <CommonBanner bannerTitle='Invoice Input Page' />
-            {!onetimeAccess ? <section className='input-page-area'>
-                <div className="container">
-                    <div className="row">
-                        <div className="col-12">
-                            <form onSubmit={handleSubmit}>
-                                <div className="customer-info">
-                                    <div className="info-item">
-                                        <label htmlFor="customerName">
-                                            Customer's Name <span style={{ color: 'red' }}>*</span>
-                                        </label>
-                                        <input type="text"
-                                            id='customerName'
-                                            name="customerName"
-                                            value={customerData.customerName}
-                                            onChange={handleChange}
-                                            required
-                                        />
-                                    </div>
-                                    <div className="info-item">
-                                        <label htmlFor="customerDate">
-                                            Date <span style={{ color: 'red' }}>*</span>
-                                        </label>
-                                        <input type="date"
-                                            id='customerDate'
-                                            name="date"
-                                            value={customerData.date || currentDate}
-                                            onChange={handleChange}
-                                            required
-                                            max={new Date().toISOString().split("T")[0]}
-                                        />
-                                    </div>
-                                </div>
-                                <div className="customer-details">
-                                    <div className="details-item">
-                                        <label htmlFor="customerAddress">
-                                            Customer Address <span style={{ color: 'red' }}>*</span>
-                                        </label>
-                                        <input type="text"
-                                            id='customerAddress'
-                                            name="customerAddress"
-                                            value={customerData.customerAddress}
-                                            onChange={handleChange}
-                                            required
-                                        />
-
-                                    </div>
-                                    <div className="details-item">
-                                        <label htmlFor="customerPhone">
-                                            Customer Phone <span style={{ color: 'red' }}>*</span>
-                                        </label>
-                                        <input type="tel"
-                                            id='customerPhone'
-                                            name="customerPhone"
-                                            value={customerData.customerPhone}
-                                            onChange={handleChange}
-                                            required
-                                        />
-
-                                    </div>
-                                </div>
-                                <div className="invoice-details">
-                                    <div className="">
-                                        <label htmlFor="invoiceDetails">
-                                            Invoice Details
-                                        </label>
-                                        <ReactQuill className='editor-input' placeholder={"Write something..."} theme="snow" value={customerData.invoiceDetails} onChange={handleModelChange} modules={modules} />
-                                    </div>
-                                </div>
-                                <br />
-                                <div className="invoice-table">
-                                    <div className="table-wrap">
-                                        <table className="table">
-                                            <thead>
-                                                <tr>
-                                                    <th >
-                                                        No.
-                                                    </th>
-                                                    <th style={{ width: "60%" }}>Items</th>
-                                                    <th style={{ width: "10%" }}>
-                                                        <strong>Quantity</strong>
-                                                    </th>
-                                                    <th style={{ width: "10%" }}>
-                                                        <strong>Price</strong>
-                                                    </th>
-                                                    <th style={{ width: "10%" }}>
-                                                        <strong>Amount</strong>
-                                                    </th>
-                                                    <th style={{ width: "10%" }}>
-                                                        Action
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {customerData?.items?.map((item, index: number) => {
-                                                    return (
-                                                        <tr key={index}>
-                                                            <td className="">
-                                                                {index + 1}
-                                                            </td>
-                                                            <td>
-                                                                <input type="text"
-                                                                    value={item.description}
-                                                                    onChange={(e) => handleItemChange(index, 'description', e.target.value)}
-                                                                />
-                                                            </td>
-                                                            <td>
-                                                                <input style={{ textAlign: 'end' }}
-                                                                    type="number"
-                                                                    value={item.quantity}
-                                                                    onChange={(e) => handleItemChange(index, 'quantity', parseInt(e.target.value))}
-                                                                />
-                                                            </td>
-                                                            <td>
-                                                                <input style={{ textAlign: 'end' }}
-                                                                    type="number"
-                                                                    value={item.price}
-                                                                    onChange={(e) => handleItemChange(index, 'price', parseFloat(e.target.value))}
-                                                                />
-                                                            </td>
-                                                            <td>
-                                                                <input style={{ textAlign: 'end' }}
-                                                                    type="number"
-                                                                    value={item.amount}
-                                                                    readOnly />
-                                                            </td>
-                                                            <td className='text-center align-middle'>
-                                                                <button type="button" className='btn btn-primary me-1' onClick={handleAddItem}><FaPlusCircle /> </button>
-                                                                {index > 0 && (<button type="button" className='btn btn-danger' onClick={() => handleRemoveItem(index)}><FaMinusCircle /></button>)}
-                                                            </td>
-                                                        </tr>
-                                                    );
-                                                })}
-                                                <tr>
-                                                    <td colSpan={2}></td>
-                                                    <td><strong>Total :</strong></td>
-                                                    <td colSpan={2} className="text-end">
-                                                        <input style={{ textAlign: 'end' }}
-                                                            type="number"
-                                                            name="total"
-                                                            value={customerData.total}
-                                                            readOnly
-                                                        />
-                                                    </td>
-                                                    <td className='align-middle text-center' rowSpan={4}> <button type="submit" className='btn btn-success'>Submit</button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td colSpan={2}></td>
-                                                    <td><strong>Prepaid :</strong></td>
-                                                    <td colSpan={2} className="text-end">
-                                                        <input style={{ textAlign: 'end' }}
-                                                            type="number"
-                                                            name="prepaid"
-                                                            value={customerData.prepaid}
-                                                            onChange={handleChangeAmount}
-                                                        />
+            <section className="input-page-area">
+                <Container>
+                    {!onetimeAccess ? (
+                        <Row>
+                            <Col md={12}>
+                                <Form onSubmit={handleSubmit}>
+                                    <Row>
+                                        <Col md={6}>
+                                            <Form.Group controlId='customerName'>
+                                                <Form.Label>Customer's Name <span className='text-danger'>*</span></Form.Label>
+                                                <Form.Control type='text' name='customerName' value={customerData.customerName} onChange={handleChange} required />
+                                            </Form.Group>
+                                        </Col>
+                                        <Col md={6}>
+                                            <Form.Group controlId='customerDate'>
+                                                <Form.Label>Date <span className='text-danger'>*</span></Form.Label>
+                                                <Form.Control type='date' name='date' value={customerData.date || currentDate} onChange={handleChange} required max={new Date().toISOString().split("T")[0]} />
+                                            </Form.Group>
+                                        </Col>
+                                    </Row>
+                                    <Row className='mt-3'>
+                                        <Col md={6}>
+                                            <Form.Group controlId='customerAddress'>
+                                                <Form.Label>Customer Address <span className='text-danger'>*</span></Form.Label>
+                                                <Form.Control type='text' name='customerAddress' value={customerData.customerAddress} onChange={handleChange} required />
+                                            </Form.Group>
+                                        </Col>
+                                        <Col md={6}>
+                                            <Form.Group controlId='customerPhone'>
+                                                <Form.Label>Customer Phone <span className='text-danger'>*</span></Form.Label>
+                                                <Form.Control type='tel' name='customerPhone' value={customerData.customerPhone} onChange={handleChange} required />
+                                            </Form.Group>
+                                        </Col>
+                                    </Row>
+                                    <Form.Group controlId='invoiceDetails' className='mt-3'>
+                                        <Form.Label>Invoice Details</Form.Label>
+                                        <ReactQuill className='editor-input' placeholder={'Write something...'} theme='snow' value={customerData.invoiceDetails} onChange={handleModelChange} modules={modules} />
+                                    </Form.Group>
+                                    <Table striped bordered hover responsive className='mt-3'>
+                                        <thead>
+                                            <tr>
+                                                <th>No.</th>
+                                                <th>Items</th>
+                                                <th>Quantity</th>
+                                                <th>Price</th>
+                                                <th>Amount</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {customerData?.items?.map((item, index) => (
+                                                <tr key={index}>
+                                                    <td>{index + 1}</td>
+                                                    <td><Form.Control type='text' value={item.description} onChange={(e) => handleItemChange(index, 'description', e.target.value)} /></td>
+                                                    <td><Form.Control type='number' value={item.quantity} onChange={(e) => handleItemChange(index, 'quantity', parseInt(e.target.value))} /></td>
+                                                    <td><Form.Control type='number' value={item.price} onChange={(e) => handleItemChange(index, 'price', parseFloat(e.target.value))} /></td>
+                                                    <td><Form.Control type='number' value={item.amount} readOnly /></td>
+                                                    <td>
+                                                        <Button variant='primary' className='me-1' onClick={handleAddItem}><FaPlusCircle /></Button>
+                                                        {index > 0 && (<Button variant='danger' onClick={() => handleRemoveItem(index)}><FaMinusCircle /></Button>)}
                                                     </td>
                                                 </tr>
-                                                <tr>
-                                                    <td colSpan={2}></td>
-                                                    <td><strong>Balance :</strong></td>
-                                                    <td colSpan={2} className="text-end">
-                                                        <input style={{ textAlign: 'end' }}
-                                                            type="number"
-                                                            name="balance"
-                                                            value={customerData.balance}
-                                                            readOnly
-                                                        />
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td colSpan={2} ></td>
-                                                    <td><strong>Delivery :</strong></td>
-                                                    <td colSpan={2} className="text-end">
-                                                        <input type="date"
-                                                            name="delivery"
-                                                            value={customerData.delivery}
-                                                            onChange={handleChange}
-                                                        />
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </section> : userToken && onetimeAccess ?
-                <section className='input-page-area'>
-                    <div className="container">
-                        <div className="row">
-                            <div className="col-12 text-center">
-                                <h2 className='mb-4 text-danger'>Your one-time access has already been used!</h2>
-                                <p>To create unlimited invoices, please visit your <Link className='text-theme fw-bold' to='/user'>PROFILE</Link> and click the <u className='text-theme fw-bold'>'Unlimited Invoice'</u> button.</p>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-                : !userToken && onetimeAccess ? <section className='input-page-area'>
-                    <div className="container">
-                        <div className="row">
-                            <div className="col-12 text-center">
-                                <h2 className='mb-4 text-danger'>Your one-time access has been used!</h2>
+                                            ))}
+                                            <tr>
+                                                <td colSpan={2}></td>
+                                                <td><strong>Total :</strong></td>
+                                                <td colSpan={2}><Form.Control type='number' name='total' value={customerData.total} readOnly /></td>
+                                                <td rowSpan={4}><Button variant='success' type='submit'>Submit</Button></td>
+                                            </tr>
+                                            <tr>
+                                                <td colSpan={2}></td>
+                                                <td><strong>Prepaid :</strong></td>
+                                                <td colSpan={2}><Form.Control type='number' name='prepaid' value={customerData.prepaid} onChange={handleChangeAmount} /></td>
+                                            </tr>
+                                            <tr>
+                                                <td colSpan={2}></td>
+                                                <td><strong>Balance :</strong></td>
+                                                <td colSpan={2}><Form.Control type='number' name='balance' value={customerData.balance} readOnly /></td>
+                                            </tr>
+                                            <tr>
+                                                <td colSpan={2}></td>
+                                                <td><strong>Delivery :</strong></td>
+                                                <td colSpan={2}><Form.Control type='date' name='delivery' value={customerData.delivery} onChange={handleChange} /></td>
+                                            </tr>
+                                        </tbody>
+                                    </Table>
+                                </Form>
+                            </Col>
+                        </Row>
+                    ) : userToken && onetimeAccess ? (
+                        <Row className='text-center'>
+                            <Col md={12}>
+                                <h2 className='text-danger'>Your one-time access has already been used!</h2>
+                                <p>To create unlimited invoices, please visit your <Link className='text-theme fw-bold' to='/user'>PROFILE</Link> and click the <span className='text-theme fw-bold'>'Unlimited Invoice'</span> button.</p>
+                            </Col>
+                        </Row>
+                    ) : !userToken && onetimeAccess ? (
+                        <Row className='text-center'>
+                            <Col md={12}>
+                                <h2 className='text-danger'>Your one-time access has been used!</h2>
                                 <p>Please <Link className='text-theme fw-bold' to='/user/register'>REGISTER</Link> to unlock unlimited access.</p>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-                    : <section className='input-page-area'>
-                        <div className="container">
-                            <div className="row">
-                                <div className="col-12">
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-            }
+                            </Col>
+                        </Row>
+                    ) : null}
+                </Container>
+            </section>
+
         </Layout>
     );
 }

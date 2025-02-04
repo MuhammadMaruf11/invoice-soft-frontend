@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link } from "react-router-dom";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -6,6 +6,7 @@ import { PrivateAPI } from '../../helper/api';
 import Layout from '../../components/Layout/Layout';
 import CommonBanner from '../../components/Banner/CommonBanner';
 import { FaMinusCircle, FaPlusCircle } from 'react-icons/fa';
+import { apiList } from '../../helper/apiList';
 
 // Define types for customer data and invoice items
 interface InvoiceItem {
@@ -55,21 +56,7 @@ const InputUnlimitedPage = () => {
         delivery: ''
     });
 
-    useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                const response = await PrivateAPI.get('/backend');
-                const data = response.data.user;
-                setCustomerData(prevState => ({
-                    ...prevState,
-                    userId: data.id // Update only the userId
-                }));
-            } catch (error) {
-                console.error('Error fetching user data:', error);
-            }
-        };
-        fetchUser();
-    }, []);
+
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -156,7 +143,7 @@ const InputUnlimitedPage = () => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            await PrivateAPI.post('/create-invoice', customerData);
+            await PrivateAPI.post(apiList.CREATE_INVOICE, customerData);
 
 
             setCustomerData({

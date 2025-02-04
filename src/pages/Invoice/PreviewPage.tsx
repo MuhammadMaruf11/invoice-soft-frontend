@@ -6,6 +6,8 @@ import { PrivateAPI } from '../../helper/api';
 import Layout from '../../components/Layout/Layout';
 import CommonBanner from '../../components/Banner/CommonBanner';
 import { FaFilePdf } from 'react-icons/fa';
+import { apiList } from './../../helper/apiList';
+import { Container, Row, Col, Table, Button } from 'react-bootstrap';
 
 interface Item {
     description: string;
@@ -41,7 +43,7 @@ const PreviewPage: React.FC = () => {
                     throw new Error('User ID not found');
                 }
 
-                const response = await PrivateAPI.get(`/invoice/${userId}`);
+                const response = await PrivateAPI.get(`${apiList.GET_SINGLE_INVOICE}/${userId}`);
                 const data = response.data[response.data.length - 1];
                 setInvoice(data);
             } catch (error) {
@@ -84,15 +86,15 @@ const PreviewPage: React.FC = () => {
         <Layout>
             <CommonBanner bannerTitle='Invoice Preview Page' />
             <section>
-                <div className="container py-4">
-                    <div className="row">
-                        <div className="col-12">
+                <Container className="py-4">
+                    <Row>
+                        <Col>
                             <div id="tablePdf" className="invoice-container">
-                                <div className="invoice-header">
-                                    <div className="logo-container">
+                                <Row className="">
+                                    <Col className="logo-container">
                                         <img src={companyLogo} alt="Company Logo" />
-                                    </div>
-                                    <div className="company-address">
+                                    </Col>
+                                    <Col className="company-address">
                                         <ul>
                                             <li>
                                                 <strong>Phone:</strong> +9613661122 &nbsp;
@@ -102,43 +104,43 @@ const PreviewPage: React.FC = () => {
                                                 <strong>Address:</strong> E-9/6, China Town Naya Paltan, Dhaka - 1000, Bangladesh
                                             </li>
                                         </ul>
-                                    </div>
-                                </div>
+                                    </Col>
+                                </Row>
                                 {isLoading ? (
                                     <p>Loading...</p>
                                 ) : invoice ? (
                                     <>
-                                        <div className="customer-info">
-                                            <div className="info-item">
+                                        <Row className="mb-3">
+                                            <Col className="info-item">
                                                 <p><strong>Customer's Name:</strong></p>
                                                 <p className="customer-name">{invoice.customerName}</p>
-                                            </div>
-                                            <div className="info-item">
+                                            </Col>
+                                            <Col className="info-item">
                                                 <p><strong>Date:</strong></p>
                                                 <p className="date">{invoice.date.slice(0, 10)}</p>
-                                            </div>
-                                        </div>
-                                        <div className="customer-info">
-                                            <div className="info-item">
+                                            </Col>
+                                        </Row>
+                                        <Row className="mb-3">
+                                            <Col className="info-item">
                                                 <p><strong>Address:</strong></p>
                                                 <p className="address">{invoice.customerAddress}</p>
-                                            </div>
-                                            <div className="info-item">
+                                            </Col>
+                                            <Col className="info-item">
                                                 <p><strong>Phone:</strong></p>
                                                 <p className="phone">{invoice.customerPhone}</p>
-                                            </div>
-                                        </div>
+                                            </Col>
+                                        </Row>
                                         <br />
-                                        <div className="customer-details">
-                                            <div className="details-item">
+                                        <Row className="mb-3">
+                                            <Col className="details-item">
                                                 <p><strong>Invoice Details:</strong></p>
                                                 <p ref={invoiceDetailsRef}></p>
-                                            </div>
-                                        </div>
+                                            </Col>
+                                        </Row>
                                         <br />
-                                        <div className="invoice-table">
-                                            <div className="table-wrap">
-                                                <table className="table">
+                                        <Row className="invoice-table">
+                                            <Col>
+                                                <Table striped bordered hover>
                                                     <thead>
                                                         <tr>
                                                             <th className="sl-no">Sl No.</th>
@@ -153,46 +155,46 @@ const PreviewPage: React.FC = () => {
                                                             <tr key={index}>
                                                                 <td className="text-center">{index + 1}</td>
                                                                 <td>{item.description}</td>
-                                                                <td className='text-end'>{item.quantity}</td>
-                                                                <td className='text-end'>{item.price}</td>
-                                                                <td className='text-end'>{item.amount}</td>
+                                                                <td className="text-end">{item.quantity}</td>
+                                                                <td className="text-end">{item.price}</td>
+                                                                <td className="text-end">{item.amount}</td>
                                                             </tr>
                                                         ))}
                                                         <tr>
                                                             <td colSpan={3}></td>
                                                             <td><strong>Total:</strong></td>
-                                                            <td colSpan={2} className="text-end"><strong><u>{invoice.total}</u></strong></td>
+                                                            <td className="text-end"><strong><u>{invoice.total}</u></strong></td>
                                                         </tr>
                                                         <tr>
                                                             <td colSpan={3}></td>
                                                             <td><strong>Prepaid:</strong></td>
-                                                            <td colSpan={2} className="text-end"><strong>{invoice.prepaid}</strong></td>
+                                                            <td className="text-end"><strong>{invoice.prepaid}</strong></td>
                                                         </tr>
                                                         <tr>
                                                             <td colSpan={3}></td>
                                                             <td><strong>Balance:</strong></td>
-                                                            <td colSpan={2} className="text-end"><strong>{invoice.balance}</strong></td>
+                                                            <td className="text-end"><strong>{invoice.balance}</strong></td>
                                                         </tr>
                                                         <tr>
                                                             <td colSpan={3}></td>
                                                             <td><strong>Delivery:</strong></td>
-                                                            <td colSpan={3} className="text-end delivery-date"><strong>{invoice.delivery}</strong></td>
+                                                            <td className="text-end delivery-date"><strong>{invoice.delivery}</strong></td>
                                                         </tr>
                                                     </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
+                                                </Table>
+                                            </Col>
+                                        </Row>
                                     </>
                                 ) : (
                                     <p>No invoice found.</p>
                                 )}
                             </div>
-                            <button className='btn btn-info d-flex align-items-center gap-2 ms-auto btn-lg me-4' onClick={exportPDF}>
+                            <Button variant="info" className="d-flex align-items-center gap-2 ms-auto btn-lg me-4" onClick={exportPDF}>
                                 <FaFilePdf /> <span>Download PDF</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                            </Button>
+                        </Col>
+                    </Row>
+                </Container>
             </section>
         </Layout>
     );

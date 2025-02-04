@@ -2,6 +2,7 @@ import { toast } from "react-toastify";
 import { PublicAPI } from "../../helper/api";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { apiList } from "../../helper/apiList";
 
 const UserRegister = () => {
 
@@ -22,7 +23,7 @@ const UserRegister = () => {
         event.preventDefault();
 
         try {
-            await PublicAPI.post('/api/auth/register', formData)
+            await PublicAPI.post(apiList.USER_REGISTER, formData)
 
             toast.success("Register Successfully", {
                 position: "top-center",
@@ -99,7 +100,7 @@ const UserRegister = () => {
                                         required
                                     />
                                 </div>
-                                <button type="submit" className='w-50 mx-auto d-block'>Register</button>
+                                <button type="submit" className='w-50 mx-auto d-block btn btn-primary'>Register</button>
                             </form>
                             <div className="text-center mt-4">
                                 Already Have account? <Link className='' to='/user/login'>Login here</Link>
