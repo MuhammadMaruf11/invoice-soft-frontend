@@ -14,12 +14,12 @@ import InputUnlimitedPage from './pages/Invoice/InputUnlimitedPage';
 import AdminRegister from './pages/Admin/AdminRegister/AdminRegister';
 import AdminAllUsers from './pages/Admin/AdminAllUsers/AdminAllUsers';
 import AdminInvoices from './pages/Admin/AdminInvoices/AdminInvoices';
+import AdminSingleInvoice from './pages/Admin/AdminInvoices/AdminSingleInvoice';
 
 function App() {
 
   const { isUserAuthenticated } = useUserAuth()
   const { isAdminAuthenticated } = useAdminAuth()
-  console.log('object', isUserAuthenticated);
   return (
     <>
       <Routes>
@@ -44,6 +44,7 @@ function App() {
         <Route path="/admin" element={isAdminAuthenticated ? <AdminDashboard /> : <Navigate to="/admin/login" />} />
         <Route path="/admin/all-users" element={isAdminAuthenticated ? <AdminAllUsers /> : <Navigate to="/admin/login" />} />
         <Route path="/admin/user-invoice" element={isAdminAuthenticated ? <AdminInvoices /> : <Navigate to="/admin/login" />} />
+        <Route path="/admin/user-invoice/:id" element={isAdminAuthenticated ? <AdminSingleInvoice /> : <Navigate to="/admin/login" />} />
 
       </Routes>
     </>

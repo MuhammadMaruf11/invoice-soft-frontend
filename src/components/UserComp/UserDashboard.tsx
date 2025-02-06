@@ -3,24 +3,11 @@ import { PublicAPI } from "../../helper/api";
 import { toast } from "react-toastify";
 import { apiList } from "../../helper/apiList";
 
-// global variables 
-const onetimeAccess = localStorage.getItem('onetimeaccess');
 
 const UserDashboard = () => {
 
 
 
-    const handleUnlimitedAccess = () => {
-
-        try {
-            localStorage.setItem('unlimitedAccess', 'true');
-            if (onetimeAccess) {
-                localStorage.removeItem('onetimeaccess')
-            }
-        } catch (error) {
-            console.error('error', error)
-        }
-    }
 
 
     const handleLogout = async () => {
@@ -68,7 +55,7 @@ const UserDashboard = () => {
                 <div className="row">
                     <div className="col-12">
                         <div className="d-flex justify-content-center gap-3">
-                            <Link className="btn btn-success btn-lg" to='/unlimited-invoice' onClick={handleUnlimitedAccess}>Unlimited Invoice</Link>
+                            <Link className="btn btn-success btn-lg" to='/unlimited-invoice'>Unlimited Invoice</Link>
                             <button className="btn btn-dark btn-lg" onClick={handleLogout}>Log Out</button>
                         </div>
                     </div>

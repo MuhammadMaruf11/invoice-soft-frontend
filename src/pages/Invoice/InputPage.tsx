@@ -6,7 +6,6 @@ import { PublicAPI } from '../../helper/api';
 import Layout from '../../components/Layout/Layout';
 import CommonBanner from '../../components/Banner/CommonBanner';
 import { FaMinusCircle, FaPlusCircle } from 'react-icons/fa';
-import { v4 as uuidv4 } from 'uuid';
 import { Form, Button, Table, Container, Row, Col } from 'react-bootstrap';
 import { apiList } from '../../helper/apiList';
 
@@ -24,7 +23,6 @@ interface CustomerData {
     customerPhone: string;
     date: string;
     invoiceDetails: string;
-    userId: string;
     items: InvoiceItem[];
     total: number;
     prepaid: number;
@@ -46,7 +44,6 @@ const InputPage = () => {
         customerPhone: '',
         date: currentDate,
         invoiceDetails: '',
-        userId: uuidv4(),
         items: [{
             description: '',
             quantity: 1,
@@ -153,7 +150,6 @@ const InputPage = () => {
             }
 
             setCustomerData({
-                userId: '',
                 customerName: '',
                 customerAddress: '',
                 customerPhone: '',
@@ -229,7 +225,7 @@ const InputPage = () => {
                                         <thead>
                                             <tr>
                                                 <th>No.</th>
-                                                <th>Items</th>
+                                                <th className='w-50'>Items</th>
                                                 <th>Quantity</th>
                                                 <th>Price</th>
                                                 <th>Amount</th>
@@ -240,7 +236,7 @@ const InputPage = () => {
                                             {customerData?.items?.map((item, index) => (
                                                 <tr key={index}>
                                                     <td>{index + 1}</td>
-                                                    <td><Form.Control type='text' value={item.description} onChange={(e) => handleItemChange(index, 'description', e.target.value)} /></td>
+                                                    <td className='w-50'><Form.Control type='text' value={item.description} onChange={(e) => handleItemChange(index, 'description', e.target.value)} /></td>
                                                     <td><Form.Control type='number' value={item.quantity} onChange={(e) => handleItemChange(index, 'quantity', parseInt(e.target.value))} /></td>
                                                     <td><Form.Control type='number' value={item.price} onChange={(e) => handleItemChange(index, 'price', parseFloat(e.target.value))} /></td>
                                                     <td><Form.Control type='number' value={item.amount} readOnly /></td>

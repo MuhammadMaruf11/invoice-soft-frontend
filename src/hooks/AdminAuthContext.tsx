@@ -9,7 +9,7 @@ type UserAuthContextType = {
 export const AdminAuthContext = createContext<UserAuthContextType | undefined>(undefined);
 
 export const AdminAuthProvider = ({ children }: { children: ReactNode }) => {
-    const [isAdminAuthenticated, setIsAdminAuthenticated] = useState<boolean>(false);
+    const [isAdminAuthenticated, setIsAdminAuthenticated] = useState<boolean>(true);
 
     useEffect(() => {
         const token = localStorage.getItem('adminToken');

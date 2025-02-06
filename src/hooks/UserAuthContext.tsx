@@ -9,7 +9,7 @@ type UserAuthContextType = {
 export const UserAuthContext = createContext<UserAuthContextType | undefined>(undefined);
 
 export const UserAuthProvider = ({ children }: { children: ReactNode }) => {
-    const [isUserAuthenticated, setisUserAuthenticated] = useState<boolean>(false);
+    const [isUserAuthenticated, setisUserAuthenticated] = useState<boolean>(true);
 
     useEffect(() => {
         const token = localStorage.getItem('userToken');

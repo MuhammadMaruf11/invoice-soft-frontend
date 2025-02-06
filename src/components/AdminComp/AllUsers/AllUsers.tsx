@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Table, Container, Spinner, Alert, Button, Modal, Form } from "react-bootstrap";
 import { AdminPrivateAPI } from "../../../helper/api";
 import { apiList } from "../../../helper/apiList";
+import PaginationComponent from "../../utils/PaginationComponent";
 
 interface User {
     _id: string;
@@ -18,13 +19,15 @@ const AllUsers = () => {
     const [modalType, setModalType] = useState<"create" | "edit" | null>(null); // To track if creating or editing
     const [selectedUser, setSelectedUser] = useState<any>(null);
     const [formData, setFormData] = useState({ username: "", email: "", password: '' });
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
 
 
     const fetchUsers = async () => {
         try {
             const response = await AdminPrivateAPI.get(apiList.ALL_USERS);
-            console.log('object', response);
             setUsers(response?.data?.users);
+            setTotalPages(response?.data.pagination.totalPages);
         } catch (err) {
             setError("Failed to fetch users.");
         } finally {
@@ -75,6 +78,8 @@ const AllUsers = () => {
         }
         setShowModal(true);
     };
+
+
 
     return (
         <Container className="py-4">
@@ -136,6 +141,11 @@ const AllUsers = () => {
                             )}
                         </tbody>
                     </Table>
+                    {totalPages > 1 && <PaginationComponent
+                        page={page}
+                        totalPages={totalPages}
+                        setPage={setPage}
+                    />}
                 </>
             )}
 

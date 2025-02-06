@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { jsPDF } from "jspdf";
 import companyLogo from '/company-logo.png';
 import 'react-quill/dist/quill.snow.css';
-import { PrivateAPI } from '../../helper/api';
+import { PublicAPI } from '../../helper/api';
 import Layout from '../../components/Layout/Layout';
 import CommonBanner from '../../components/Banner/CommonBanner';
 import { FaFilePdf } from 'react-icons/fa';
@@ -43,7 +43,7 @@ const PreviewPage: React.FC = () => {
                     throw new Error('User ID not found');
                 }
 
-                const response = await PrivateAPI.get(`${apiList.GET_SINGLE_INVOICE}/${userId}`);
+                const response = await PublicAPI.get(`${apiList.GET_SINGLE_INVOICE}/${userId}`);
                 const data = response.data[response.data.length - 1];
                 setInvoice(data);
             } catch (error) {
