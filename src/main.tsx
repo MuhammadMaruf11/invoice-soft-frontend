@@ -9,8 +9,8 @@ import "react-toastify/dist/ReactToastify.css";
 import './user.css'
 import './admin.css'
 import './index.css'
-import { UserAuthProvider } from './hooks/UserAuthContext.tsx';
-import { AdminAuthProvider } from './hooks/AdminAuthContext.tsx';
+import { UserAuthProvider } from './lib/userContext/UserAuthContext.tsx';
+import { AdminAuthProvider } from './lib/adminContext/AdminAuthContext.tsx';
 
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

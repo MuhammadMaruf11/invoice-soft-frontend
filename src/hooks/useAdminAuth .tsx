@@ -1,6 +1,6 @@
-// useUserAuth.ts
+// useAdminAuth.ts
 import { useContext } from 'react';
-import { AdminAuthContext } from './AdminAuthContext';
+import { AdminAuthContext } from '../lib/adminContext/AdminAuthContext';
 
 export const useAdminAuth = () => {
     const context = useContext(AdminAuthContext);

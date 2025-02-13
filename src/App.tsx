@@ -15,11 +15,19 @@ import AdminRegister from './pages/Admin/AdminRegister/AdminRegister';
 import AdminAllUsers from './pages/Admin/AdminAllUsers/AdminAllUsers';
 import AdminInvoices from './pages/Admin/AdminInvoices/AdminInvoices';
 import AdminSingleInvoice from './pages/Admin/AdminInvoices/AdminSingleInvoice';
+import { Spinner } from 'react-bootstrap';
 
 function App() {
 
-  const { isUserAuthenticated } = useUserAuth()
-  const { isAdminAuthenticated } = useAdminAuth()
+  const { isUserAuthenticated, isLoading: userLoading } = useUserAuth()
+  const { isAdminAuthenticated, isLoading: adminLoading } = useAdminAuth();
+
+  if (userLoading || adminLoading) {
+    return <div className='d-flex vh-100 justify-center align-items-center'>
+      <Spinner animation="border" role="status" className=" mx-auto" />
+    </div>;
+  }
+
   return (
     <>
       <Routes>

@@ -8,7 +8,6 @@ interface User {
     _id: string;
     username: string;
     email: string;
-    // Add other fields as required
 }
 
 const AllUsers = () => {
@@ -25,7 +24,7 @@ const AllUsers = () => {
 
     const fetchUsers = async () => {
         try {
-            const response = await AdminPrivateAPI.get(apiList.ALL_USERS);
+            const response = await AdminPrivateAPI.get(`${apiList.ALL_USERS}?page=${page}&itemsPerPage=10`);
             setUsers(response?.data?.users);
             setTotalPages(response?.data.pagination.totalPages);
         } catch (err) {
@@ -37,7 +36,7 @@ const AllUsers = () => {
 
     useEffect(() => {
         fetchUsers();
-    }, []);
+    }, [page]);
 
     const handleCreateEditUser = async () => {
         try {

@@ -27,7 +27,6 @@ const AdminRegister = () => {
 
         try {
             await AdminAPI.post(apiList.ADMIN_REGISTER, formData)
-
             toast.success("Successfully register", {
                 position: "top-center",
                 autoClose: 2000,
@@ -53,6 +52,9 @@ const AdminRegister = () => {
                 theme: "colored",
             });
             console.error('Error:', error);
+            setTimeout(() => {
+                navigate("/admin/register");
+            }, 1500);
         }
     };
 

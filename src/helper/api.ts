@@ -1,6 +1,4 @@
 import axios from "axios";
-import { redirect } from "react-router-dom";
-// import { redirect } from "react-router-dom";
 
 const userToken = localStorage.getItem("userToken");
 const adminToken = localStorage.getItem("adminToken");
@@ -60,7 +58,7 @@ PrivateAPI.interceptors.response.use(
   (error) => {
     if (error.response.status === 401) {
       localStorage.removeItem("userToken");
-      redirect("/user/login");
+    window.open("/user/login", "_self");
     }
     return Promise.reject(error);
   }
@@ -71,7 +69,7 @@ AdminPrivateAPI.interceptors.response.use(
   (error) => {
     if (error.response.status === 401) {
       localStorage.removeItem("adminToken");
-      redirect("/admin/login");
+      window.open("/admin/login",'_self');
     }
     return Promise.reject(error);
   }
