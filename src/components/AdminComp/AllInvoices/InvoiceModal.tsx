@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Modal, Row, Col, Table, Button } from "react-bootstrap";
 import companyLogo from '/company-logo.png';
 
@@ -10,7 +11,7 @@ interface InvoiceModalProps {
 
 const InvoiceModal = ({ show, onClose, invoice, invoiceDetailsRef }: InvoiceModalProps) => (
     <Modal show={show} size="xl" onHide={onClose}>
-        <Modal.Header closeButton>
+        <Modal.Header className="bg-info" closeButton>
             <Modal.Title>Invoice Details</Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -44,7 +45,7 @@ const InvoiceModal = ({ show, onClose, invoice, invoiceDetailsRef }: InvoiceModa
                                 </tr>
                             </thead>
                             <tbody>
-                                {invoice.items.map((item, index) => (
+                                {invoice.items.map((item: any, index: any) => (
                                     <tr key={index}>
                                         <td>{index + 1}</td>
                                         <td>{item.description}</td>

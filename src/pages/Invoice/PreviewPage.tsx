@@ -189,7 +189,7 @@ const PreviewPage: React.FC = () => {
                                     <p>No invoice found.</p>
                                 )}
                             </div>
-                            <Button variant="info" className="d-flex align-items-center gap-2 ms-auto btn-lg me-4" onClick={exportPDF}>
+                            <Button variant="info" className="d-flex align-items-center gap-2 ms-auto btn-lg me-5" onClick={exportPDF}>
                                 <FaFilePdf /> <span>Download PDF</span>
                             </Button>
                         </Col>

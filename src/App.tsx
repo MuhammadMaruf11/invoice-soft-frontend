@@ -16,6 +16,7 @@ import AdminAllUsers from './pages/Admin/AdminAllUsers/AdminAllUsers';
 import AdminInvoices from './pages/Admin/AdminInvoices/AdminInvoices';
 import AdminSingleInvoice from './pages/Admin/AdminInvoices/AdminSingleInvoice';
 import { Spinner } from 'react-bootstrap';
+import Docs from './pages/Docs/Docs';
 
 function App() {
 
@@ -36,6 +37,7 @@ function App() {
 
         <Route path="/" element={<Home />} />
         <Route path="/free-trial" element={<InputPage />} />
+        <Route path="/docs" element={<Docs />} />
         <Route path="/invoice/preview" element={<PreviewPage />} />
 
         {/* User routes herer  */}

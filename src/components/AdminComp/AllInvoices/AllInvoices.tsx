@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect, useRef } from "react";
 import { Container, Spinner } from "react-bootstrap";
 import { AdminPrivateAPI } from "../../../helper/api";
@@ -8,13 +9,6 @@ import InvoiceModal from "./InvoiceModal";
 import DeleteInvoiceConfirmation from "./DeleteInvoiceConfirmation ";
 
 // Interfaces
-interface User {
-    _id: string;
-    customerName: string;
-    customerAddress: string;
-    customerPhone: string;
-    date: string;
-}
 
 interface Invoice {
     _id: string;
@@ -39,7 +33,7 @@ interface Item {
 
 const AllInvoices = () => {
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [invoices, setInvoices] = useState<User[]>([]);
+    const [invoices, setInvoices] = useState<Invoice[]>([]);
     const [error, setError] = useState("");
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
@@ -79,7 +73,7 @@ const AllInvoices = () => {
                 await AdminPrivateAPI.delete(`${apiList.DELETE_SINGE_INVOICE}/${invoiceToDelete}`);
                 fetchInvoices();
                 setShowDeleteConfirmation(false);
-            } catch (err) {
+            } catch (err: any) {
                 console.error('error', err.message);
             }
         }
